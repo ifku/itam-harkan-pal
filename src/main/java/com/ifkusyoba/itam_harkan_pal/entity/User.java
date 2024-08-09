@@ -1,4 +1,4 @@
-package com.ifkusyoba.itam_harkan_pal.model;
+package com.ifkusyoba.itam_harkan_pal.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

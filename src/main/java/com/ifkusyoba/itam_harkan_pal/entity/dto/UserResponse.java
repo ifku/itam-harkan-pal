@@ -1,4 +1,4 @@
-package com.ifkusyoba.itam_harkan_pal.model.dto;
+package com.ifkusyoba.itam_harkan_pal.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
