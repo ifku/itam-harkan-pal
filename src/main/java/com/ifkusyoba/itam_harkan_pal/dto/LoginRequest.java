@@ -1,4 +1,4 @@
-package com.ifkusyoba.itam_harkan_pal.entity.dto;
+package com.ifkusyoba.itam_harkan_pal.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
