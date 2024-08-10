@@ -1,5 +1,6 @@
 package com.ifkusyoba.itam_harkan_pal.service;
 
+import com.ifkusyoba.itam_harkan_pal.dto.UserResponse;
 import com.ifkusyoba.itam_harkan_pal.entity.User;
 import com.ifkusyoba.itam_harkan_pal.exception.InvalidPasswordException;
 import com.ifkusyoba.itam_harkan_pal.exception.UserNotFoundException;
@@ -31,7 +32,7 @@ public class AuthService {
         }
     }
 
-    public User login(String email, String password) {
+    public UserResponse login(String email, String password) {
         Optional<User> userOptional = authRepository.findByUserEmail(email);
         if (userOptional.isEmpty()) {
             throw new UserNotFoundException("User not found");
@@ -42,6 +43,16 @@ public class AuthService {
             throw new InvalidPasswordException("Invalid password");
         }
 
-        return user;
+        return UserResponse.builder()
+                .idUser(user.getIdUser())
+                .userEmail(user.getUserEmail())
+                .userNip(user.getUserNip())
+                .userName(user.getUserName())
+                .userPhone(user.getUserPhone())
+                .userBirthDate(user.getUserBirthDate())
+                .roleId(user.getRoleId())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .build();
     }
 }

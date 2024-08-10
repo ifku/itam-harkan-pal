@@ -31,9 +31,6 @@ public class UserResponse {
     @JsonProperty("user_birthdate")
     private LocalDate userBirthDate;
 
-    @JsonProperty("user_password")
-    private String userPassword;
-
     @JsonProperty("user_role_id")
     private int roleId;
 

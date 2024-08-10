@@ -1,6 +1,7 @@
 package com.ifkusyoba.itam_harkan_pal.controller;
 
 import com.ifkusyoba.itam_harkan_pal.dto.LoginRequest;
+import com.ifkusyoba.itam_harkan_pal.dto.UserResponse;
 import com.ifkusyoba.itam_harkan_pal.entity.User;
 import com.ifkusyoba.itam_harkan_pal.entity.WebResponse;
 import com.ifkusyoba.itam_harkan_pal.service.AuthService;
@@ -33,11 +34,11 @@ public class AuthController {
     }
 
     @PostMapping(path = "/auth/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public WebResponse<User> login(@RequestBody LoginRequest loginRequest) {
-        User user = authService.login(loginRequest.getEmail(), loginRequest.getPassword());
-        return WebResponse.<User>builder()
+    public WebResponse<UserResponse> login(@RequestBody LoginRequest loginRequest) {
+        UserResponse userResponse = authService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        return WebResponse.<UserResponse>builder()
                 .message("Login successful")
-                .data(user)
+                .data(userResponse)
                 .isSuccess(true)
                 .build();
     }
