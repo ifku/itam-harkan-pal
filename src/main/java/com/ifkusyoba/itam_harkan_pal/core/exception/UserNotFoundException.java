@@ -1,4 +1,4 @@
-package com.ifkusyoba.itam_harkan_pal.exception;
+package com.ifkusyoba.itam_harkan_pal.core.exception;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String message) {

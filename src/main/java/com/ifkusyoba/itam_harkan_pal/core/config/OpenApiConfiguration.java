@@ -1,4 +1,4 @@
-package com.ifkusyoba.itam_harkan_pal.config;
+package com.ifkusyoba.itam_harkan_pal.core.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

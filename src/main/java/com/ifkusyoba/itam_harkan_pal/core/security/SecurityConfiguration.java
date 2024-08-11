@@ -1,4 +1,4 @@
-package com.ifkusyoba.itam_harkan_pal.security;
+package com.ifkusyoba.itam_harkan_pal.core.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

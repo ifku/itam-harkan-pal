@@ -1,10 +1,10 @@
 package com.ifkusyoba.itam_harkan_pal.controller;
 
-import com.ifkusyoba.itam_harkan_pal.dto.LoginRequest;
-import com.ifkusyoba.itam_harkan_pal.dto.UserResponse;
-import com.ifkusyoba.itam_harkan_pal.entity.User;
-import com.ifkusyoba.itam_harkan_pal.entity.WebResponse;
-import com.ifkusyoba.itam_harkan_pal.service.AuthService;
+import com.ifkusyoba.itam_harkan_pal.features.auth.dto.LoginRequest;
+import com.ifkusyoba.itam_harkan_pal.features.auth.dto.UserResponse;
+import com.ifkusyoba.itam_harkan_pal.features.auth.entity.User;
+import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
+import com.ifkusyoba.itam_harkan_pal.features.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;

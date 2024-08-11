@@ -1,10 +1,10 @@
-package com.ifkusyoba.itam_harkan_pal.service;
+package com.ifkusyoba.itam_harkan_pal.features.auth.service;
 
-import com.ifkusyoba.itam_harkan_pal.dto.UserResponse;
-import com.ifkusyoba.itam_harkan_pal.entity.User;
-import com.ifkusyoba.itam_harkan_pal.exception.InvalidPasswordException;
-import com.ifkusyoba.itam_harkan_pal.exception.UserNotFoundException;
-import com.ifkusyoba.itam_harkan_pal.repository.AuthRepository;
+import com.ifkusyoba.itam_harkan_pal.features.auth.dto.UserResponse;
+import com.ifkusyoba.itam_harkan_pal.features.auth.entity.User;
+import com.ifkusyoba.itam_harkan_pal.core.exception.InvalidPasswordException;
+import com.ifkusyoba.itam_harkan_pal.core.exception.UserNotFoundException;
+import com.ifkusyoba.itam_harkan_pal.features.auth.repository.AuthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

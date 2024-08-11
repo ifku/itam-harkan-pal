@@ -1,4 +1,4 @@
-package com.ifkusyoba.itam_harkan_pal.entity;
+package com.ifkusyoba.itam_harkan_pal.core;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

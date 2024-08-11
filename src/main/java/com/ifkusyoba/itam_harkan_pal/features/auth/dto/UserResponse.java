@@ -1,4 +1,4 @@
-package com.ifkusyoba.itam_harkan_pal.dto;
+package com.ifkusyoba.itam_harkan_pal.features.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

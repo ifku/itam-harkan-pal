@@ -1,4 +1,4 @@
-package com.ifkusyoba.itam_harkan_pal.util;
+package com.ifkusyoba.itam_harkan_pal.core.util;
 
 import java.util.Arrays;
 import java.util.Collection;
