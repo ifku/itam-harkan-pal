@@ -41,6 +41,8 @@ public class AuthService {
                 .userPhone(user.getUserPhone())
                 .userBirthDate(user.getUserBirthDate())
                 .roleId(user.getRoleId().getIdRole())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 }

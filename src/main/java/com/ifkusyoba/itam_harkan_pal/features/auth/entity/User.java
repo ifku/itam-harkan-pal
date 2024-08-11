@@ -14,8 +14,8 @@ import lombok.Setter;
 
 import java.sql.Date;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

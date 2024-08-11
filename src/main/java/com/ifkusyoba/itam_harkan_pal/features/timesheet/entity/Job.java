@@ -1,22 +1,22 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.entity;
 
+import com.ifkusyoba.itam_harkan_pal.core.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_job")
-public class Job {
+public class Job extends BaseEntity {
     @Id
     @Column(name = "id_job")
     private Long idJob;
