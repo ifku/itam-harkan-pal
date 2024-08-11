@@ -6,7 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
@@ -29,15 +30,15 @@ public class UserResponse {
     private String userPhone;
 
     @JsonProperty("user_birthdate")
-    private LocalDate userBirthDate;
+    private Date userBirthDate;
 
     @JsonProperty("user_role_id")
     private int roleId;
 
     @JsonProperty("created_at")
-    private LocalDate createdAt;
+    private Timestamp createdAt;
 
     @JsonProperty("updated_at")
-    private LocalDate updatedAt;
+    private Timestamp updatedAt;
 
 }

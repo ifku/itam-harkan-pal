@@ -1,15 +1,14 @@
 package com.ifkusyoba.itam_harkan_pal.features.auth.service;
 
-import com.ifkusyoba.itam_harkan_pal.features.auth.dto.UserResponse;
-import com.ifkusyoba.itam_harkan_pal.features.auth.entity.User;
 import com.ifkusyoba.itam_harkan_pal.core.exception.InvalidPasswordException;
 import com.ifkusyoba.itam_harkan_pal.core.exception.UserNotFoundException;
+import com.ifkusyoba.itam_harkan_pal.features.auth.dto.UserResponse;
+import com.ifkusyoba.itam_harkan_pal.features.auth.entity.User;
 import com.ifkusyoba.itam_harkan_pal.features.auth.repository.AuthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,15 +20,6 @@ public class AuthService {
     public AuthService(AuthRepository authRepository, PasswordEncoder passwordEncoder) {
         this.authRepository = authRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-
-    public List<User> getAllUser() {
-        try {
-            return authRepository.findAll();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public UserResponse login(String email, String password) {
@@ -50,9 +40,7 @@ public class AuthService {
                 .userName(user.getUserName())
                 .userPhone(user.getUserPhone())
                 .userBirthDate(user.getUserBirthDate())
-                .roleId(user.getRoleId())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
+                .roleId(user.getRoleId().getIdRole())
                 .build();
     }
 }

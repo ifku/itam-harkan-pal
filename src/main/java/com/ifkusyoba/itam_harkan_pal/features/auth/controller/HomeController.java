@@ -1,4 +1,4 @@
-package com.ifkusyoba.itam_harkan_pal.controller;
+package com.ifkusyoba.itam_harkan_pal.features.auth.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,27 +1,28 @@
 package com.ifkusyoba.itam_harkan_pal.features.auth.entity;
 
+
+import com.ifkusyoba.itam_harkan_pal.core.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.Setter;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_users")
-public class User {
+public class User extends BaseEntity {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @Deprecated
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_user")
     private String idUser;
 
@@ -42,31 +43,17 @@ public class User {
     @Column(name = "user_phone")
     private String userPhone;
 
-    @NotBlank(message = "Birth Date is required")
+    //    @NotBlank(message = "Birth Date is required")
     @Column(name = "user_birth_date")
-    private LocalDate userBirthDate;
+    private Date userBirthDate;
 
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must be at least 8 characters long")
     @Column(name = "user_password")
     private String userPassword;
 
-    @Column(name = "role_id")
-    private int roleId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role roleId;
 
-    @Column(name = "created_at")
-    private LocalDate createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDate updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDate.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDate.now();
-    }
 }
