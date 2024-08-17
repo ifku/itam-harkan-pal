@@ -1,37 +1,41 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.entity;
 
 import com.ifkusyoba.itam_harkan_pal.core.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
-
-import java.sql.Timestamp;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tb_job")
+@Table(name = "tb_jobs")
 public class Job extends BaseEntity {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "job_seq")
+    @SequenceGenerator(
+            name = "job_seq",
+            sequenceName = "job_sequence",
+            initialValue = 101,
+            allocationSize = 1
+    )
     @Column(name = "id_job")
-    private Long idJob;
+    private Integer idJob;
 
     @NotBlank(message = "Job Name is required")
     @Column(name = "job_name")
     private String jobName;
 
-    @NotBlank(message = "Job hour is required")
-    @Column(name = "job_hour")
-    private Long jobHour;
+    @Column(name = "job_duration")
+    private Integer jobDuration;
 
-    @Column(name = "created_at")
-    private Timestamp createdAt;
+    @ManyToOne
+    @JoinColumn(name = "work_order_id")
+    private WorkOrder workOrder;
 
-    @Column(name = "updated_at")
-    private Timestamp updatedAt;
 }
