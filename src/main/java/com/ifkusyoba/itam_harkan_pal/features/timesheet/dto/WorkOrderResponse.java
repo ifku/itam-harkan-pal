@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,5 +22,8 @@ public class WorkOrderResponse {
     private String workOrderName;
 
     @JsonProperty("work_order_duration")
-    private Integer workOrderDuration;
+    private LocalTime workOrderDuration;
+
+    @JsonProperty("jobs")
+    private List<JobResponse> jobResponse;
 }

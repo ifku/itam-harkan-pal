@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Setter
@@ -18,6 +19,13 @@ import java.util.List;
 public class WorkOrder extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "work_order_seq")
+    @SequenceGenerator(
+            name = "work_order_seq",
+            sequenceName = "work_order_seq",
+            initialValue = 101,
+            allocationSize = 1
+    )
     @Column(name = "id_work_order")
     private Integer idWorkOrder;
 
@@ -25,7 +33,7 @@ public class WorkOrder extends BaseEntity {
     private String workOrderName;
 
     @Column(name = "work_order_duration")
-    private Integer workOrderDuration;
+    private LocalTime workOrderDuration;
 
     /*@ManyToOne(targetEntity = Timesheet.class)
     private Timesheet timesheet;*/

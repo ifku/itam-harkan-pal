@@ -4,6 +4,7 @@ import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.WorkOrderRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalTime;
 import java.util.Map;
 
 @Component
@@ -28,7 +29,7 @@ public class WorkOrderSeeder {
             WorkOrder workOrder = new WorkOrder();
             workOrder.setIdWorkOrder(id);
             workOrder.setWorkOrderName(description);
-            workOrder.setWorkOrderDuration(10);
+            workOrder.setWorkOrderDuration(LocalTime.of(2, 20));
             workOrderRepository.save(workOrder);
         });
 
