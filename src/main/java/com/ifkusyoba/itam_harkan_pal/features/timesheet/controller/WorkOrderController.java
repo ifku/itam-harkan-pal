@@ -1,8 +1,9 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.controller;
 
 import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.WorkOrderRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.WorkOrderResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.CreateWorkOrderRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.GetWorkOrderResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.UpdateWorkOrderDurationRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.service.WorkOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,31 +21,41 @@ public class WorkOrderController {
     }
 
     @GetMapping
-    public WebResponse<List<WorkOrderResponse>> getAllWorkOrders() {
-        List<WorkOrderResponse> workOrderResponses = workOrderService.getAllWorkOrder();
-        return WebResponse.<List<WorkOrderResponse>>builder()
+    public WebResponse<List<GetWorkOrderResponse>> getAllWorkOrders() {
+        List<GetWorkOrderResponse> getWorkOrderRespons = workOrderService.getAllWorkOrder();
+        return WebResponse.<List<GetWorkOrderResponse>>builder()
                 .message("Fetch All WorkOrder data Success")
-                .data(workOrderResponses)
+                .data(getWorkOrderRespons)
                 .isSuccess(true)
                 .build();
     }
 
     @GetMapping("/{id}")
-    public WebResponse<WorkOrderResponse> getWorkOrderById(@PathVariable Integer id) {
-        WorkOrderResponse workOrderResponse = workOrderService.getWorkOrderById(id);
-        return WebResponse.<WorkOrderResponse>builder()
+    public WebResponse<GetWorkOrderResponse> getWorkOrderById(@PathVariable Integer id) {
+        GetWorkOrderResponse getWorkOrderResponse = workOrderService.getWorkOrderById(id);
+        return WebResponse.<GetWorkOrderResponse>builder()
                 .message("Fetch WorkOrder by Id Success")
-                .data(workOrderResponse)
+                .data(getWorkOrderResponse)
                 .isSuccess(true)
                 .build();
     }
 
     @PostMapping()
-    public WebResponse<WorkOrderResponse> createWorkOrder(@RequestBody WorkOrderRequest request) {
-        WorkOrderResponse workOrderResponse = workOrderService.createWorkOrder(request);
-        return WebResponse.<WorkOrderResponse>builder()
+    public WebResponse<GetWorkOrderResponse> createWorkOrder(@RequestBody CreateWorkOrderRequest request) {
+        GetWorkOrderResponse getWorkOrderResponse = workOrderService.createWorkOrder(request);
+        return WebResponse.<GetWorkOrderResponse>builder()
                 .message("Create WorkOrder Success")
-                .data(workOrderResponse)
+                .data(getWorkOrderResponse)
+                .isSuccess(true)
+                .build();
+    }
+
+    @PatchMapping("/update-duration/{id}")
+    public WebResponse<GetWorkOrderResponse> updateWorkOrderDuration(@PathVariable Integer id, @RequestBody UpdateWorkOrderDurationRequest request) {
+        GetWorkOrderResponse getWorkOrderResponse = workOrderService.updateWorkOrderDuration(id, request);
+        return WebResponse.<GetWorkOrderResponse>builder()
+                .message("Update WorkOrder Duration Success")
+                .data(getWorkOrderResponse)
                 .isSuccess(true)
                 .build();
     }

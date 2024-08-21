@@ -1,5 +1,6 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,13 +13,8 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class JobResponse {
-    @JsonProperty("id_job")
-    private Integer idJob;
-
-    @JsonProperty("job_name")
-    private String jobName;
-
-    @JsonProperty("job_duration")
-    private LocalTime jobDuration;
+public class UpdateWorkOrderDurationRequest {
+    @JsonProperty("work_order_duration")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    private LocalTime workOrderDuration;
 }

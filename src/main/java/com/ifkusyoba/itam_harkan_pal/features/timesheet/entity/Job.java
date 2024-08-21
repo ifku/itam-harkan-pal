@@ -39,5 +39,4 @@ public class Job extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "work_order_id")
     private WorkOrder workOrder;
-
 }

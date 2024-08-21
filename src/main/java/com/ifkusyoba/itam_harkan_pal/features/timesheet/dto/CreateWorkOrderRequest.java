@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WorkOrderRequest {
+public class CreateWorkOrderRequest {
 
     @JsonProperty("work_order_name")
     @NotBlank(message = "Work Order Name is required")
