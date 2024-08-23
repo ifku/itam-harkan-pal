@@ -11,7 +11,9 @@ public class OpenApiConfiguration {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("ITAM Harkan PT. PAl Indonesia API").version("1.0.0"));
+                .info(new Info().title("ITAM Harkan PT. PAl Indonesia API")
+                        .description("API for ITAM Harkan PT. PAL Indonesia")
+                        .version("1.0.0"));
     }
 
     @Bean

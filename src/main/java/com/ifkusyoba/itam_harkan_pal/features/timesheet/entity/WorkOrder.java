@@ -35,8 +35,8 @@ public class WorkOrder extends BaseEntity {
     @Column(name = "work_order_duration")
     private LocalTime workOrderDuration;
 
-    /*@ManyToOne(targetEntity = Timesheet.class)
-    private Timesheet timesheet;*/
+    @ManyToMany(mappedBy = "workOrders")
+    private List<Timesheet> timesheets;
 
     @OneToMany(mappedBy = "workOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Job> jobs;

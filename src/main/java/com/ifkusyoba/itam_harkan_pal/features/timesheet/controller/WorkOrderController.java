@@ -5,6 +5,7 @@ import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.CreateWorkOrderReque
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.GetWorkOrderResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.UpdateWorkOrderDurationRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.service.WorkOrderService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("workorder")
+@Tag(name = "WorkOrder", description = "Endpoint for WorkOrder")
 public class WorkOrderController {
     private final WorkOrderService workOrderService;
 

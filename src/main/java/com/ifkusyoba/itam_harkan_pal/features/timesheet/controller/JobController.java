@@ -4,6 +4,7 @@ import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.CreateJobRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.GetJobResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.service.JobService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("job")
+@Tag(name = "Job", description = "Endpoint for Job")
 public class JobController {
     private final JobService jobService;
 
