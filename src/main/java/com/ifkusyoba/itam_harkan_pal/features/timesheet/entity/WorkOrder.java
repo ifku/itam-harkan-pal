@@ -33,7 +33,7 @@ public class WorkOrder extends BaseEntity {
     private String workOrderName;
 
     @Column(name = "work_order_duration")
-    private LocalTime workOrderDuration;
+    private Integer workOrderDuration;
 
     @ManyToMany(mappedBy = "workOrders")
     private List<Timesheet> timesheets;

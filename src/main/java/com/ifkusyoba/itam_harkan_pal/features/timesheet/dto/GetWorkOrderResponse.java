@@ -23,8 +23,7 @@ public class GetWorkOrderResponse {
     private String workOrderName;
 
     @JsonProperty("work_order_duration")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
-    private LocalTime workOrderDuration;
+    private Integer workOrderDuration;
 
     @JsonProperty("jobs")
     private List<GetJobResponse> getJobResponse;

@@ -59,7 +59,7 @@ public class WorkOrderService {
     public GetWorkOrderResponse createWorkOrder(CreateWorkOrderRequest request) {
         WorkOrder workOrder = new WorkOrder();
         workOrder.setWorkOrderName(request.getWorkOrderName());
-        workOrder.setWorkOrderDuration(LocalTime.of(0, 0));
+        workOrder.setWorkOrderDuration(0);
         workOrderRepository.save(workOrder);
         return GetWorkOrderResponse.builder()
                 .idWorkOrder(workOrder.getIdWorkOrder())

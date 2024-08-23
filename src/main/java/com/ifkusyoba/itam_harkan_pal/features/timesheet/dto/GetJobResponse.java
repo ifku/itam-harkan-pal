@@ -21,6 +21,5 @@ public class GetJobResponse {
     private String jobName;
 
     @JsonProperty("job_duration")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
-    private LocalTime jobDuration;
+    private Integer jobDuration;
 }

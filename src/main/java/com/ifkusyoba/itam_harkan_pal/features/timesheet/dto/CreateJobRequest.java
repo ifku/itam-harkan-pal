@@ -17,7 +17,7 @@ public class CreateJobRequest {
     private String jobName;
 
     @JsonProperty("job_duration")
-    private LocalTime jobDuration;
+    private Integer jobDuration;
 
     @JsonProperty("work_order_id")
     private Integer workOrderId;

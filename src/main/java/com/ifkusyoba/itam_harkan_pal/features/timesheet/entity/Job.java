@@ -34,7 +34,7 @@ public class Job extends BaseEntity {
     private String jobName;
 
     @Column(name = "job_duration")
-    private LocalTime jobDuration;
+    private Integer jobDuration;
 
     @ManyToOne
     @JoinColumn(name = "work_order_id")

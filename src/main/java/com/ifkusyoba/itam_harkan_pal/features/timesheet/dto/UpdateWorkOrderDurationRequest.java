@@ -15,6 +15,5 @@ import java.time.LocalTime;
 @Builder
 public class UpdateWorkOrderDurationRequest {
     @JsonProperty("work_order_duration")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
-    private LocalTime workOrderDuration;
+    private Integer workOrderDuration;
 }
