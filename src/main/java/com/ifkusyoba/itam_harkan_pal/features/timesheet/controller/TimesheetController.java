@@ -1,6 +1,7 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.controller;
 
 import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.AddWorkOrderRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.CreateTimesheetRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.GetTimesheetResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.GetTimesheetByIdResponse;
@@ -49,6 +50,18 @@ public class TimesheetController {
         return WebResponse.<GetTimesheetResponse>builder()
                 .message("Create Timesheet data Success")
                 .data(timesheet)
+                .isSuccess(true)
+                .build();
+    }
+
+    @PostMapping("/add-workorder")
+    public WebResponse<GetTimesheetResponse> addWorkOrderToTimesheet(
+            @RequestBody AddWorkOrderRequest request) {
+
+        GetTimesheetResponse updatedTimesheet = timesheetService.addWorkOrderToTimesheet(request.getTimesheetId(), request.getWorkOrderId());
+        return WebResponse.<GetTimesheetResponse>builder()
+                .message("Add WorkOrder to Timesheet Success")
+                .data(updatedTimesheet)
                 .isSuccess(true)
                 .build();
     }

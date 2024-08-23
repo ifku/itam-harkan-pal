@@ -3,8 +3,11 @@ package com.ifkusyoba.itam_harkan_pal.features.timesheet.service;
 import com.ifkusyoba.itam_harkan_pal.core.exception.DataNotFoundException;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.*;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Timesheet;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.TimesheetWorkOrder;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.TimesheetRepository;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.TimesheetWorkOrderRepository;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.WorkOrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +19,16 @@ import java.util.stream.Collectors;
 public class TimesheetService {
 
     private final TimesheetRepository timesheetRepository;
+    private final WorkOrderRepository workOrderRepository;
+    private final TimesheetWorkOrderRepository timesheetWorkOrderRepository;
 
     @Autowired
-    public TimesheetService(TimesheetRepository timesheetRepository) {
+    public TimesheetService(TimesheetRepository timesheetRepository,
+                            WorkOrderRepository workOrderRepository,
+                            TimesheetWorkOrderRepository timesheetWorkOrderRepository) {
         this.timesheetRepository = timesheetRepository;
+        this.workOrderRepository = workOrderRepository;
+        this.timesheetWorkOrderRepository = timesheetWorkOrderRepository;
     }
 
     public List<GetTimesheetResponse> getAllTimesheet() {
@@ -52,6 +61,27 @@ public class TimesheetService {
         timesheet.setTimesheetName(request.getTimesheetName());
         timesheet.setTimesheetDate(request.getTimesheetDate());
         timesheetRepository.save(timesheet);
+
+        return GetTimesheetResponse.builder()
+                .idTimesheet(timesheet.getIdTimesheet())
+                .timesheetName(timesheet.getTimesheetName())
+                .timesheetDate(timesheet.getTimesheetDate())
+                .build();
+    }
+
+    @Transactional
+    public GetTimesheetResponse addWorkOrderToTimesheet(Integer timesheetId, Integer workOrderId) {
+        Timesheet timesheet = timesheetRepository.findById(timesheetId)
+                .orElseThrow(() -> new DataNotFoundException("Timesheet with id " + timesheetId + " not found"));
+
+        WorkOrder workOrder = workOrderRepository.findById(workOrderId)
+                .orElseThrow(() -> new DataNotFoundException("WorkOrder with id " + workOrderId + " not found"));
+
+        TimesheetWorkOrder timesheetWorkOrder = new TimesheetWorkOrder();
+        timesheetWorkOrder.setTimesheet(timesheet);
+        timesheetWorkOrder.setWorkOrder(workOrder);
+
+        timesheetWorkOrderRepository.save(timesheetWorkOrder);
 
         return GetTimesheetResponse.builder()
                 .idTimesheet(timesheet.getIdTimesheet())
