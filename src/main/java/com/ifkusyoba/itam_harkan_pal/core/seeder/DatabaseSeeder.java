@@ -1,5 +1,6 @@
 package com.ifkusyoba.itam_harkan_pal.core.seeder;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     }
 
     @Override
+    @Transactional
     public void run(String... args) {
         workOrderSeeder.seedWorkOrders();
     }

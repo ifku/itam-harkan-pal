@@ -19,7 +19,7 @@ import java.util.List;
 public class Timesheet extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "timesheet_sew")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "timesheet_seq")
     @SequenceGenerator(
             name = "timesheet_seq",
             sequenceName = "timesheet_seq",
