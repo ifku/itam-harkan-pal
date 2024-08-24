@@ -1,7 +1,12 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.service;
 
 import com.ifkusyoba.itam_harkan_pal.core.exception.DataNotFoundException;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.*;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.CreateTimesheetRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetByIdResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.UpdateTimesheetRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Timesheet;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.TimesheetWorkOrder;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
@@ -61,6 +66,35 @@ public class TimesheetService {
         timesheet.setTimesheetName(request.getTimesheetName());
         timesheet.setTimesheetDate(request.getTimesheetDate());
         timesheetRepository.save(timesheet);
+
+        return GetTimesheetResponse.builder()
+                .idTimesheet(timesheet.getIdTimesheet())
+                .timesheetName(timesheet.getTimesheetName())
+                .timesheetDate(timesheet.getTimesheetDate())
+                .build();
+    }
+
+    @Transactional
+    public GetTimesheetResponse updateTimesheet(Integer id, UpdateTimesheetRequest request) {
+        Timesheet timesheet = timesheetRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Timesheet with id " + id + " not found"));
+
+        timesheet.setTimesheetName(request.getTimesheetName());
+        timesheet.setTimesheetDate(request.getTimesheetDate());
+        timesheetRepository.save(timesheet);
+
+        return GetTimesheetResponse.builder()
+                .idTimesheet(timesheet.getIdTimesheet())
+                .timesheetName(timesheet.getTimesheetName())
+                .timesheetDate(timesheet.getTimesheetDate())
+                .build();
+    }
+
+    @Transactional
+    public GetTimesheetResponse deleteTimesheet(Integer id) {
+        Timesheet timesheet = timesheetRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Timesheet with id " + id + " not found"));
+        timesheetRepository.delete(timesheet);
 
         return GetTimesheetResponse.builder()
                 .idTimesheet(timesheet.getIdTimesheet())

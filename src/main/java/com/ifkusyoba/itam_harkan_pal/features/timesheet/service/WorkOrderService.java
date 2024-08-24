@@ -1,10 +1,10 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.service;
 
 import com.ifkusyoba.itam_harkan_pal.core.exception.DataNotFoundException;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.GetJobResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.CreateWorkOrderRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.UpdateWorkOrderDurationRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.GetWorkOrderResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.CreateWorkOrderRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.UpdateWorkOrderDurationRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Job;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.WorkOrderRepository;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

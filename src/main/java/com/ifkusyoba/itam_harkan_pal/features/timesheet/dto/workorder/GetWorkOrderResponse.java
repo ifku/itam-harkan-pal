@@ -1,13 +1,12 @@
-package com.ifkusyoba.itam_harkan_pal.features.timesheet.dto;
+package com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
 import java.util.List;
 
 @Data

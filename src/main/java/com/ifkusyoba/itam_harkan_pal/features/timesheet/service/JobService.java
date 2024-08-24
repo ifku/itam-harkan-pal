@@ -1,8 +1,7 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.service;
 
-import com.ifkusyoba.itam_harkan_pal.core.exception.DataNotFoundException;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.CreateJobRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.GetJobResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.CreateJobRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Job;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.JobRepository;

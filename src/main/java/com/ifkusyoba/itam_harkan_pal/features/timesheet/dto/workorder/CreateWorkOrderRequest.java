@@ -1,4 +1,4 @@
-package com.ifkusyoba.itam_harkan_pal.features.timesheet.dto;
+package com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package com.ifkusyoba.itam_harkan_pal.features.timesheet.dto;
+package com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -12,11 +12,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetTimesheetResponse {
-
-    @JsonProperty("id_timesheet")
-    private Integer idTimesheet;
-
+public class UpdateTimesheetRequest {
     @JsonProperty("timesheet_name")
     private String timesheetName;
 
