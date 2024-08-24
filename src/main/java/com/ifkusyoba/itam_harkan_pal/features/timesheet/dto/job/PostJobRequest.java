@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateJobRequest {
+public class PostJobRequest {
     @JsonProperty("job_name")
     private String jobName;
 

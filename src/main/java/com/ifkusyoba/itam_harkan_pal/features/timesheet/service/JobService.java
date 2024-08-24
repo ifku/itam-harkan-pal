@@ -1,6 +1,6 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.service;
 
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.CreateJobRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.PostJobRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Job;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
@@ -32,7 +32,7 @@ public class JobService {
     }
 
     @Transactional
-    public GetJobResponse createJob(CreateJobRequest request) {
+    public GetJobResponse createJob(PostJobRequest request) {
         Job job = new Job();
         WorkOrder workOrder = workOrderRepository.findById(request.getWorkOrderId())
                 .orElseThrow(() -> new RuntimeException("WorkOrder not found"));

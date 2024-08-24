@@ -12,8 +12,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateTimesheetRequest {
-
+public class PutTimesheetRequest {
     @JsonProperty("timesheet_name")
     private String timesheetName;
 

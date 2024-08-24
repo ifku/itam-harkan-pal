@@ -1,9 +1,9 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.controller;
 
 import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.CreateWorkOrderRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PostWorkOrderRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.UpdateWorkOrderDurationRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PatchWorkOrderDurationRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.service.WorkOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,7 +47,7 @@ public class WorkOrderController {
 
     @PostMapping()
     @Operation(summary = "Create WorkOrder", description = "Create WorkOrder data")
-    public WebResponse<GetWorkOrderResponse> createWorkOrder(@RequestBody CreateWorkOrderRequest request) {
+    public WebResponse<GetWorkOrderResponse> createWorkOrder(@RequestBody PostWorkOrderRequest request) {
         GetWorkOrderResponse getWorkOrderResponse = workOrderService.createWorkOrder(request);
         return WebResponse.<GetWorkOrderResponse>builder()
                 .message("Create WorkOrder Success")
@@ -58,7 +58,7 @@ public class WorkOrderController {
 
     @PatchMapping("/update-duration/{id}")
     @Operation(summary = "Update WorkOrder Duration", description = "Update WorkOrder Duration")
-    public WebResponse<GetWorkOrderResponse> updateWorkOrderDuration(@PathVariable Integer id, @RequestBody UpdateWorkOrderDurationRequest request) {
+    public WebResponse<GetWorkOrderResponse> updateWorkOrderDuration(@PathVariable Integer id, @RequestBody PatchWorkOrderDurationRequest request) {
         GetWorkOrderResponse getWorkOrderResponse = workOrderService.updateWorkOrderDuration(id, request);
         return WebResponse.<GetWorkOrderResponse>builder()
                 .message("Update WorkOrder Duration Success")

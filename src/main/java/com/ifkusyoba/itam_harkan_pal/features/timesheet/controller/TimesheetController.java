@@ -1,9 +1,9 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.controller;
 
 import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.UpdateTimesheetRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PutTimesheetRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.AddWorkOrderRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.CreateTimesheetRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PostTimesheetRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetByIdResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.service.TimesheetService;
@@ -50,7 +50,7 @@ public class TimesheetController {
 
     @PostMapping()
     @Operation(summary = "Create Timesheet", description = "Create Timesheet data")
-    public WebResponse<GetTimesheetResponse> createTimesheet(@RequestBody CreateTimesheetRequest request) {
+    public WebResponse<GetTimesheetResponse> createTimesheet(@RequestBody PostTimesheetRequest request) {
         GetTimesheetResponse timesheet = timesheetService.createTimesheet(request);
         return WebResponse.<GetTimesheetResponse>builder()
                 .message("Create Timesheet data Success")
@@ -61,7 +61,7 @@ public class TimesheetController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update Timesheet", description = "Update Timesheet data")
-    public WebResponse<GetTimesheetResponse> updateTImesheet(@PathVariable Integer id, @RequestBody UpdateTimesheetRequest request) {
+    public WebResponse<GetTimesheetResponse> updateTImesheet(@PathVariable Integer id, @RequestBody PutTimesheetRequest request) {
         GetTimesheetResponse updatedTimesheet = timesheetService.updateTimesheet(id, request);
         return WebResponse.<GetTimesheetResponse>builder()
                 .message("Update Timesheet data Success")

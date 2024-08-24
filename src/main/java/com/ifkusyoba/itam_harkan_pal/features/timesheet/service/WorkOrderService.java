@@ -2,8 +2,8 @@ package com.ifkusyoba.itam_harkan_pal.features.timesheet.service;
 
 import com.ifkusyoba.itam_harkan_pal.core.exception.DataNotFoundException;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.CreateWorkOrderRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.UpdateWorkOrderDurationRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PostWorkOrderRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PatchWorkOrderDurationRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Job;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
@@ -55,7 +55,7 @@ public class WorkOrderService {
     }
 
     @Transactional
-    public GetWorkOrderResponse createWorkOrder(CreateWorkOrderRequest request) {
+    public GetWorkOrderResponse createWorkOrder(PostWorkOrderRequest request) {
         WorkOrder workOrder = new WorkOrder();
         workOrder.setWorkOrderName(request.getWorkOrderName());
         workOrder.setWorkOrderDuration(0);
@@ -68,7 +68,7 @@ public class WorkOrderService {
     }
 
     @Transactional
-    public GetWorkOrderResponse updateWorkOrderDuration(Integer id, UpdateWorkOrderDurationRequest request) {
+    public GetWorkOrderResponse updateWorkOrderDuration(Integer id, PatchWorkOrderDurationRequest request) {
         WorkOrder workOrder = workOrderRepository.findById(id).orElse(null);
         if (workOrder == null) {
             throw new DataNotFoundException("WorkOrder with id " + id + " not found");

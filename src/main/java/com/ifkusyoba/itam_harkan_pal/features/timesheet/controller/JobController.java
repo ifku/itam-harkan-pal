@@ -1,7 +1,7 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.controller;
 
 import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.CreateJobRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.PostJobRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.service.JobService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,7 +36,7 @@ public class JobController {
 
     @PostMapping()
     @Operation(summary = "Create Job", description = "Create Job data")
-    public WebResponse<GetJobResponse> createJob(@RequestBody CreateJobRequest request) {
+    public WebResponse<GetJobResponse> createJob(@RequestBody PostJobRequest request) {
         GetJobResponse getJobResponse = jobService.createJob(request);
         return WebResponse.<GetJobResponse>builder()
                 .message("Create Job Success")

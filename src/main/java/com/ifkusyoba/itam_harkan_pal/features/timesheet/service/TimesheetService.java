@@ -2,10 +2,10 @@ package com.ifkusyoba.itam_harkan_pal.features.timesheet.service;
 
 import com.ifkusyoba.itam_harkan_pal.core.exception.DataNotFoundException;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.CreateTimesheetRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PostTimesheetRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetByIdResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.UpdateTimesheetRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PutTimesheetRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Timesheet;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.TimesheetWorkOrder;
@@ -61,7 +61,7 @@ public class TimesheetService {
     }
 
     @Transactional
-    public GetTimesheetResponse createTimesheet(CreateTimesheetRequest request) {
+    public GetTimesheetResponse createTimesheet(PostTimesheetRequest request) {
         Timesheet timesheet = new Timesheet();
         timesheet.setTimesheetName(request.getTimesheetName());
         timesheet.setTimesheetDate(request.getTimesheetDate());
@@ -75,7 +75,7 @@ public class TimesheetService {
     }
 
     @Transactional
-    public GetTimesheetResponse updateTimesheet(Integer id, UpdateTimesheetRequest request) {
+    public GetTimesheetResponse updateTimesheet(Integer id, PutTimesheetRequest request) {
         Timesheet timesheet = timesheetRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Timesheet with id " + id + " not found"));
 
