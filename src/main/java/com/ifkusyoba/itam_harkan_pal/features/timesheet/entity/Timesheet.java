@@ -35,11 +35,6 @@ public class Timesheet extends BaseEntity {
     @Column(name = "timesheet_date")
     private Timestamp timesheetDate;
 
-    @ManyToMany
-    @JoinTable(
-            name = "tb_timesheet_work_order",
-            joinColumns = @JoinColumn(name = "timesheet_id"),
-            inverseJoinColumns = @JoinColumn(name = "work_order_id")
-    )
+    @OneToMany(mappedBy = "timesheet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkOrder> workOrders;
 }

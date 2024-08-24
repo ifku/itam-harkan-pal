@@ -30,6 +30,7 @@ public class WorkOrderSeeder {
             workOrder.setWorkOrderCode(id);
             workOrder.setWorkOrderName(description);
             workOrder.setWorkOrderDuration(2);
+            workOrder.setTimesheet(null);
             workOrderRepository.save(workOrder);
         });
 

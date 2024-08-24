@@ -8,10 +8,8 @@ import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimeshe
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PutTimesheetRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Timesheet;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.TimesheetWorkOrder;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.TimesheetRepository;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.TimesheetWorkOrderRepository;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.WorkOrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +23,12 @@ public class TimesheetService {
 
     private final TimesheetRepository timesheetRepository;
     private final WorkOrderRepository workOrderRepository;
-    private final TimesheetWorkOrderRepository timesheetWorkOrderRepository;
 
     @Autowired
     public TimesheetService(TimesheetRepository timesheetRepository,
-                            WorkOrderRepository workOrderRepository,
-                            TimesheetWorkOrderRepository timesheetWorkOrderRepository) {
+                            WorkOrderRepository workOrderRepository) {
         this.timesheetRepository = timesheetRepository;
         this.workOrderRepository = workOrderRepository;
-        this.timesheetWorkOrderRepository = timesheetWorkOrderRepository;
     }
 
     public List<GetTimesheetResponse> getAllTimesheet() {
@@ -108,21 +103,11 @@ public class TimesheetService {
         Timesheet timesheet = timesheetRepository.findById(timesheetId)
                 .orElseThrow(() -> new DataNotFoundException("Timesheet with id " + timesheetId + " not found"));
 
-        WorkOrder originalWorkOrder = workOrderRepository.findById(workOrderId)
+        WorkOrder workOrder = workOrderRepository.findById(workOrderId)
                 .orElseThrow(() -> new DataNotFoundException("WorkOrder with id " + workOrderId + " not found"));
 
-        WorkOrder newWorkOrder = new WorkOrder();
-        newWorkOrder.setWorkOrderCode(originalWorkOrder.getWorkOrderCode());
-        newWorkOrder.setWorkOrderName(originalWorkOrder.getWorkOrderName());
-        newWorkOrder.setWorkOrderDuration(originalWorkOrder.getWorkOrderDuration());
-
-        workOrderRepository.save(newWorkOrder);
-
-        TimesheetWorkOrder timesheetWorkOrder = new TimesheetWorkOrder();
-        timesheetWorkOrder.setTimesheet(timesheet);
-        timesheetWorkOrder.setWorkOrder(newWorkOrder);
-
-        timesheetWorkOrderRepository.save(timesheetWorkOrder);
+        workOrder.setTimesheet(timesheet);
+        workOrderRepository.save(workOrder);
 
         return GetTimesheetResponse.builder()
                 .idTimesheet(timesheet.getIdTimesheet())
@@ -138,6 +123,7 @@ public class TimesheetService {
                 .workOrderCode(workOrder.getWorkOrderCode())
                 .workOrderName(workOrder.getWorkOrderName())
                 .workOrderDuration(workOrder.getWorkOrderDuration())
+                .timesheetId(workOrder.getTimesheet().getIdTimesheet())
                 .getJobResponse(workOrder.getJobs().stream()
                         .map(job -> GetJobResponse.builder()
                                 .idJob(job.getIdJob())

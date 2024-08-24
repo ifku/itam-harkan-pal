@@ -13,6 +13,7 @@ import lombok.Setter;
 public class AddWorkOrderRequest {
     @JsonProperty("timesheet_id")
     private Integer timesheetId;
+
     @JsonProperty("work_order_id")
     private Integer workOrderId;
 }

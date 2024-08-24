@@ -37,8 +37,9 @@ public class WorkOrder extends BaseEntity {
     @Column(name = "work_order_duration")
     private Integer workOrderDuration;
 
-    @ManyToMany(mappedBy = "workOrders")
-    private List<Timesheet> timesheets;
+    @ManyToOne
+    @JoinColumn(name = "timesheet_id", nullable = true)
+    private Timesheet timesheet;
 
     @OneToMany(mappedBy = "workOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Job> jobs;

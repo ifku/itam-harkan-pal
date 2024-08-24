@@ -27,6 +27,9 @@ public class GetWorkOrderResponse {
     @JsonProperty("work_order_duration")
     private Integer workOrderDuration;
 
+    @JsonProperty("timesheet_id")
+    private Integer timesheetId;
+
     @JsonProperty("jobs")
     private List<GetJobResponse> getJobResponse;
 }
