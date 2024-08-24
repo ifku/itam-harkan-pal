@@ -91,12 +91,12 @@ public class TimesheetService {
     }
 
     @Transactional
-    public GetTimesheetResponse deleteTimesheet(Integer id) {
+    public void deleteTimesheet(Integer id) {
         Timesheet timesheet = timesheetRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Timesheet with id " + id + " not found"));
         timesheetRepository.delete(timesheet);
 
-        return GetTimesheetResponse.builder()
+        GetTimesheetResponse.builder()
                 .idTimesheet(timesheet.getIdTimesheet())
                 .timesheetName(timesheet.getTimesheetName())
                 .timesheetDate(timesheet.getTimesheetDate())
@@ -127,6 +127,7 @@ public class TimesheetService {
     private GetWorkOrderResponse mapToGetWorkOrderResponse(WorkOrder workOrder) {
         return GetWorkOrderResponse.builder()
                 .idWorkOrder(workOrder.getIdWorkOrder())
+                .workOrderCode(workOrder.getWorkOrderCode())
                 .workOrderName(workOrder.getWorkOrderName())
                 .workOrderDuration(workOrder.getWorkOrderDuration())
                 .getJobResponse(workOrder.getJobs().stream()

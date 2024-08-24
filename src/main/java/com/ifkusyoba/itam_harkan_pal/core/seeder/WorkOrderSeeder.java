@@ -27,6 +27,7 @@ public class WorkOrderSeeder {
         workOrders.forEach((id, description) -> {
             WorkOrder workOrder = new WorkOrder();
             workOrder.setIdWorkOrder(id);
+            workOrder.setWorkOrderCode(id);
             workOrder.setWorkOrderName(description);
             workOrder.setWorkOrderDuration(2);
             workOrderRepository.save(workOrder);

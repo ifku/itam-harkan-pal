@@ -5,6 +5,7 @@ import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PostWorkOrderRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PatchWorkOrderDurationRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PutWorkOrderRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Job;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.WorkOrderRepository;
@@ -30,6 +31,7 @@ public class WorkOrderService {
         return workOrders.stream()
                 .map(workOrder -> GetWorkOrderResponse.builder()
                         .idWorkOrder(workOrder.getIdWorkOrder())
+                        .workOrderCode(workOrder.getWorkOrderCode())
                         .workOrderName(workOrder.getWorkOrderName())
                         .workOrderDuration(workOrder.getWorkOrderDuration())
                         .getJobResponse(workOrder.getJobs().stream()
@@ -46,7 +48,9 @@ public class WorkOrderService {
         }
         return GetWorkOrderResponse.builder()
                 .idWorkOrder(workOrder.getIdWorkOrder())
+                .workOrderCode(workOrder.getWorkOrderCode())
                 .workOrderName(workOrder.getWorkOrderName())
+                .workOrderCode(workOrder.getWorkOrderCode())
                 .workOrderDuration(workOrder.getWorkOrderDuration())
                 .getJobResponse(workOrder.getJobs().stream()
                         .map(this::mapToJobResponse)
@@ -57,13 +61,35 @@ public class WorkOrderService {
     @Transactional
     public GetWorkOrderResponse createWorkOrder(PostWorkOrderRequest request) {
         WorkOrder workOrder = new WorkOrder();
+        workOrder.setWorkOrderCode(request.getWorkOrderCode());
         workOrder.setWorkOrderName(request.getWorkOrderName());
         workOrder.setWorkOrderDuration(0);
         workOrderRepository.save(workOrder);
         return GetWorkOrderResponse.builder()
                 .idWorkOrder(workOrder.getIdWorkOrder())
+                .workOrderCode(workOrder.getWorkOrderCode())
                 .workOrderName(workOrder.getWorkOrderName())
                 .workOrderDuration(workOrder.getWorkOrderDuration())
+                .build();
+    }
+
+    @Transactional
+    public GetWorkOrderResponse updateWorkOrder(Integer id, PutWorkOrderRequest request) {
+        WorkOrder workOrder = workOrderRepository.findById(id).orElseThrow(() -> new DataNotFoundException("WorkOrder with id " + id + " not found"));
+
+        workOrder.setWorkOrderCode(request.getWorkOrderCode());
+        workOrder.setWorkOrderName(request.getWorkOrderName());
+        workOrder.setWorkOrderDuration(request.getWorkOrderDuration());
+        workOrder.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+        return GetWorkOrderResponse.builder()
+                .idWorkOrder(workOrder.getIdWorkOrder())
+                .workOrderCode(workOrder.getWorkOrderCode())
+                .workOrderName(workOrder.getWorkOrderName())
+                .workOrderDuration(workOrder.getWorkOrderDuration())
+                .getJobResponse(workOrder.getJobs().stream()
+                        .map(this::mapToJobResponse)
+                        .collect(Collectors.toList()))
                 .build();
     }
 
@@ -78,6 +104,7 @@ public class WorkOrderService {
         workOrderRepository.save(workOrder);
         return GetWorkOrderResponse.builder()
                 .idWorkOrder(workOrder.getIdWorkOrder())
+                .workOrderCode(workOrder.getWorkOrderCode())
                 .workOrderName(workOrder.getWorkOrderName())
                 .workOrderDuration(workOrder.getWorkOrderDuration())
                 .getJobResponse(workOrder.getJobs().stream()

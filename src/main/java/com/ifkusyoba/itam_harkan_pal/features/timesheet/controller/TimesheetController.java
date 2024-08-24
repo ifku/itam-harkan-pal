@@ -61,7 +61,7 @@ public class TimesheetController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update Timesheet", description = "Update Timesheet data")
-    public WebResponse<GetTimesheetResponse> updateTImesheet(@PathVariable Integer id, @RequestBody PutTimesheetRequest request) {
+    public WebResponse<GetTimesheetResponse> updateTimesheet(@PathVariable Integer id, @RequestBody PutTimesheetRequest request) {
         GetTimesheetResponse updatedTimesheet = timesheetService.updateTimesheet(id, request);
         return WebResponse.<GetTimesheetResponse>builder()
                 .message("Update Timesheet data Success")
@@ -73,7 +73,7 @@ public class TimesheetController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete Timesheet", description = "Delete Timesheet Data by Id")
     public WebResponse<Void> deleteTimesheet(@PathVariable Integer id) {
-        GetTimesheetResponse deletedTimesheet = timesheetService.deleteTimesheet(id);
+        timesheetService.deleteTimesheet(id);
         return WebResponse.<Void>builder()
                 .message("Delete Timesheet data Success")
                 .data(null)

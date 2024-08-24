@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalTime;
 import java.util.List;
 
 @Setter
@@ -28,6 +27,9 @@ public class WorkOrder extends BaseEntity {
     )
     @Column(name = "id_work_order")
     private Integer idWorkOrder;
+
+    @Column(name = "work_order_code")
+    private Integer workOrderCode;
 
     @Column(name = "work_order_name")
     private String workOrderName;

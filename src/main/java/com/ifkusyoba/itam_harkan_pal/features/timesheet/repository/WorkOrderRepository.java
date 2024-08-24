@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface WorkOrderRepository extends JpaRepository<WorkOrder, Integer> {
     Optional<WorkOrder> findById(Integer id);
+
+    Optional<WorkOrder> findByWorkOrderCode(Integer workOrderCode);
 }
