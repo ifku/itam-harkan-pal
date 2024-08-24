@@ -108,12 +108,19 @@ public class TimesheetService {
         Timesheet timesheet = timesheetRepository.findById(timesheetId)
                 .orElseThrow(() -> new DataNotFoundException("Timesheet with id " + timesheetId + " not found"));
 
-        WorkOrder workOrder = workOrderRepository.findById(workOrderId)
+        WorkOrder originalWorkOrder = workOrderRepository.findById(workOrderId)
                 .orElseThrow(() -> new DataNotFoundException("WorkOrder with id " + workOrderId + " not found"));
+
+        WorkOrder newWorkOrder = new WorkOrder();
+        newWorkOrder.setWorkOrderCode(originalWorkOrder.getWorkOrderCode());
+        newWorkOrder.setWorkOrderName(originalWorkOrder.getWorkOrderName());
+        newWorkOrder.setWorkOrderDuration(originalWorkOrder.getWorkOrderDuration());
+
+        workOrderRepository.save(newWorkOrder);
 
         TimesheetWorkOrder timesheetWorkOrder = new TimesheetWorkOrder();
         timesheetWorkOrder.setTimesheet(timesheet);
-        timesheetWorkOrder.setWorkOrder(workOrder);
+        timesheetWorkOrder.setWorkOrder(newWorkOrder);
 
         timesheetWorkOrderRepository.save(timesheetWorkOrder);
 
@@ -123,6 +130,7 @@ public class TimesheetService {
                 .timesheetDate(timesheet.getTimesheetDate())
                 .build();
     }
+
 
     private GetWorkOrderResponse mapToGetWorkOrderResponse(WorkOrder workOrder) {
         return GetWorkOrderResponse.builder()

@@ -44,6 +44,7 @@ public class JobService {
                 .idJob(job.getIdJob())
                 .jobName(job.getJobName())
                 .jobDuration(job.getJobDuration())
+                .workOrderId(job.getWorkOrder().getIdWorkOrder())
                 .build();
     }
 
@@ -53,6 +54,7 @@ public class JobService {
                 .idJob(job.getIdJob())
                 .jobName(job.getJobName())
                 .jobDuration(job.getJobDuration())
+                .workOrderId(job.getWorkOrder().getIdWorkOrder())
                 .build();
     }
 }
