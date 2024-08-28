@@ -19,4 +19,8 @@ public class PostWorkOrderRequest {
     @JsonProperty("work_order_name")
     @NotBlank(message = "Work Order Name is required")
     private String workOrderName;
+
+    @JsonProperty("timesheet_id")
+    @NotBlank(message = "Timesheet Id is required")
+    private Integer timesheetId;
 }

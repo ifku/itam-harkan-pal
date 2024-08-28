@@ -1,11 +1,10 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.controller;
 
 import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PutTimesheetRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.AddWorkOrderRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PostTimesheetRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetByIdResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PostTimesheetRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PutTimesheetRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.service.TimesheetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -77,19 +76,6 @@ public class TimesheetController {
         return WebResponse.<Void>builder()
                 .message("Delete Timesheet data Success")
                 .data(null)
-                .isSuccess(true)
-                .build();
-    }
-
-    @PostMapping("/add-workorder")
-    @Operation(summary = "Add WorkOrder to Timesheet", description = "Add WorkOrder to Timesheet")
-    public WebResponse<GetTimesheetResponse> addWorkOrderToTimesheet(
-            @RequestBody AddWorkOrderRequest request) {
-
-        GetTimesheetResponse updatedTimesheet = timesheetService.addWorkOrderToTimesheet(request.getTimesheetId(), request.getWorkOrderId());
-        return WebResponse.<GetTimesheetResponse>builder()
-                .message("Add WorkOrder to Timesheet Success")
-                .data(updatedTimesheet)
                 .isSuccess(true)
                 .build();
     }

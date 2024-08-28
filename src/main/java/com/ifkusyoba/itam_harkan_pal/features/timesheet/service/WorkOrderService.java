@@ -7,7 +7,9 @@ import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PatchWorkO
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PutWorkOrderRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Job;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Timesheet;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.TimesheetRepository;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.WorkOrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,12 @@ import java.util.stream.Collectors;
 @Service
 public class WorkOrderService {
     private final WorkOrderRepository workOrderRepository;
+    private final TimesheetRepository timesheetRepository;
 
     @Autowired
-    public WorkOrderService(WorkOrderRepository workOrderRepository) {
+    public WorkOrderService(WorkOrderRepository workOrderRepository, TimesheetRepository timesheetRepository) {
         this.workOrderRepository = workOrderRepository;
+        this.timesheetRepository = timesheetRepository;
     }
 
     public List<GetWorkOrderResponse> getAllWorkOrder() {
@@ -61,10 +65,13 @@ public class WorkOrderService {
 
     @Transactional
     public GetWorkOrderResponse createWorkOrder(PostWorkOrderRequest request) {
+        Timesheet timesheet = timesheetRepository.findById(request.getTimesheetId())
+                .orElseThrow(() -> new DataNotFoundException("Timesheet with id " + request.getTimesheetId() + " not found"));
         WorkOrder workOrder = new WorkOrder();
         workOrder.setWorkOrderCode(request.getWorkOrderCode());
         workOrder.setWorkOrderName(request.getWorkOrderName());
         workOrder.setWorkOrderDuration(0);
+        workOrder.setTimesheet(timesheet);
         workOrderRepository.save(workOrder);
         return GetWorkOrderResponse.builder()
                 .idWorkOrder(workOrder.getIdWorkOrder())

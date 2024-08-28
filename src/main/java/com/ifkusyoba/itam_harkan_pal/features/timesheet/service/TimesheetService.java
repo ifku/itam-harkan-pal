@@ -22,13 +22,10 @@ import java.util.stream.Collectors;
 public class TimesheetService {
 
     private final TimesheetRepository timesheetRepository;
-    private final WorkOrderRepository workOrderRepository;
 
     @Autowired
-    public TimesheetService(TimesheetRepository timesheetRepository,
-                            WorkOrderRepository workOrderRepository) {
+    public TimesheetService(TimesheetRepository timesheetRepository) {
         this.timesheetRepository = timesheetRepository;
-        this.workOrderRepository = workOrderRepository;
     }
 
     public List<GetTimesheetResponse> getAllTimesheet() {
@@ -97,25 +94,6 @@ public class TimesheetService {
                 .timesheetDate(timesheet.getTimesheetDate())
                 .build();
     }
-
-    @Transactional
-    public GetTimesheetResponse addWorkOrderToTimesheet(Integer timesheetId, Integer workOrderId) {
-        Timesheet timesheet = timesheetRepository.findById(timesheetId)
-                .orElseThrow(() -> new DataNotFoundException("Timesheet with id " + timesheetId + " not found"));
-
-        WorkOrder workOrder = workOrderRepository.findById(workOrderId)
-                .orElseThrow(() -> new DataNotFoundException("WorkOrder with id " + workOrderId + " not found"));
-
-        workOrder.setTimesheet(timesheet);
-        workOrderRepository.save(workOrder);
-
-        return GetTimesheetResponse.builder()
-                .idTimesheet(timesheet.getIdTimesheet())
-                .timesheetName(timesheet.getTimesheetName())
-                .timesheetDate(timesheet.getTimesheetDate())
-                .build();
-    }
-
 
     private GetWorkOrderResponse mapToGetWorkOrderResponse(WorkOrder workOrder) {
         return GetWorkOrderResponse.builder()
