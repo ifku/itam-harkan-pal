@@ -22,7 +22,7 @@ public class Job extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "job_seq")
     @SequenceGenerator(
             name = "job_seq",
-            sequenceName = "job_sequence",
+            sequenceName = "job_seq",
             initialValue = 101,
             allocationSize = 1
     )

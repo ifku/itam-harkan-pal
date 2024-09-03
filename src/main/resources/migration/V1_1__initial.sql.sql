@@ -1,21 +1,32 @@
--- V1__create_work_order_timesheet_job_tables.sql
+-- Drop the existing sequence if it exists
+DROP SEQUENCE IF EXISTS timesheet_seq;
+DROP SEQUENCE IF EXISTS work_order_seq;
+DROP SEQUENCE IF EXISTS job_seq;
 
-CREATE SEQUENCE IF NOT EXISTS timesheet_seq
-    START WITH 1
+
+-- Create the sequence again
+CREATE SEQUENCE timesheet_seq
+    START WITH 101
     INCREMENT BY 1;
 
+CREATE SEQUENCE work_order_seq
+    START WITH 101
+    INCREMENT BY 1;
+
+CREATE SEQUENCE job_seq
+    START WITH 101
+    INCREMENT BY 1;
+
+-- Create the table with the sequence
 CREATE TABLE IF NOT EXISTS tb_timesheet
 (
     id_timesheet   INTEGER PRIMARY KEY DEFAULT nextval('timesheet_seq'),
     timesheet_name VARCHAR(255) NOT NULL,
     timesheet_date TIMESTAMP    NOT NULL,
-    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at     TIMESTAMP           DEFAULT CURRENT_TIMESTAMP,
+    updated_at     TIMESTAMP           DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE SEQUENCE IF NOT EXISTS work_order_seq
-    START WITH 1
-    INCREMENT BY 1;
 
 CREATE TABLE IF NOT EXISTS tb_work_order
 (
@@ -29,13 +40,9 @@ CREATE TABLE IF NOT EXISTS tb_work_order
     CONSTRAINT fk_timesheet_id FOREIGN KEY (timesheet_id) REFERENCES tb_timesheet (id_timesheet)
 );
 
-CREATE SEQUENCE IF NOT EXISTS job_sequence
-    START WITH 1
-    INCREMENT BY 1;
-
 CREATE TABLE IF NOT EXISTS tb_jobs
 (
-    id_job        INTEGER PRIMARY KEY DEFAULT nextval('job_sequence'),
+    id_job        INTEGER PRIMARY KEY DEFAULT nextval('job_seq'),
     job_name      VARCHAR(255) NOT NULL,
     job_duration  INTEGER      NOT NULL,
     work_order_id INTEGER,

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,6 +79,8 @@ public class WorkOrderService {
                 .workOrderCode(workOrder.getWorkOrderCode())
                 .workOrderName(workOrder.getWorkOrderName())
                 .workOrderDuration(workOrder.getWorkOrderDuration())
+                .timesheetId(workOrder.getTimesheet().getIdTimesheet())
+                .getJobResponse(Collections.emptyList())
                 .build();
     }
 
