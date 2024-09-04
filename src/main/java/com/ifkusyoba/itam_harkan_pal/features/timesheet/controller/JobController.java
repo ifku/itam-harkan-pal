@@ -35,13 +35,14 @@ public class JobController {
     }
 
     @PostMapping()
-    @Operation(summary = "Create Job", description = "Create Job data")
-    public WebResponse<GetJobResponse> createJob(@RequestBody PostJobRequest request) {
-        GetJobResponse getJobResponse = jobService.createJob(request);
-        return WebResponse.<GetJobResponse>builder()
-                .message("Create Job Success")
-                .data(getJobResponse)
+    @Operation(summary = "Create Multiple Jobs", description = "Create multiple job data at once")
+    public WebResponse<List<GetJobResponse>> createMultipleJobs(@RequestBody List<PostJobRequest> requests) {
+        List<GetJobResponse> jobResponses = jobService.createJob(requests);
+        return WebResponse.<List<GetJobResponse>>builder()
+                .message("Create Multiple Jobs Success")
+                .data(jobResponses)
                 .isSuccess(true)
                 .build();
     }
+
 }

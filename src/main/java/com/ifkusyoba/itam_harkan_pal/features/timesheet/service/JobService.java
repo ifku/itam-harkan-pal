@@ -1,5 +1,6 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.service;
 
+import com.ifkusyoba.itam_harkan_pal.core.exception.DataNotFoundException;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.PostJobRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Job;
@@ -32,20 +33,28 @@ public class JobService {
     }
 
     @Transactional
-    public GetJobResponse createJob(PostJobRequest request) {
-        Job job = new Job();
-        WorkOrder workOrder = workOrderRepository.findById(request.getWorkOrderId())
-                .orElseThrow(() -> new RuntimeException("WorkOrder not found"));
-        job.setJobName(request.getJobName());
-        job.setJobDuration(request.getJobDuration());
-        job.setWorkOrder(workOrder);
-        jobRepository.save(job);
-        return GetJobResponse.builder()
-                .idJob(job.getIdJob())
-                .jobName(job.getJobName())
-                .jobDuration(job.getJobDuration())
-                .workOrderId(job.getWorkOrder().getIdWorkOrder())
-                .build();
+    public List<GetJobResponse> createJob(List<PostJobRequest> requests) {
+        List<GetJobResponse> jobResponses = requests.stream()
+                .map(request -> {
+                    Job job = new Job();
+                    WorkOrder workOrder = workOrderRepository.findById(request.getWorkOrderId())
+                            .orElseThrow(() -> new DataNotFoundException("WorkOrder not found"));
+                    job.setJobName(request.getJobName());
+                    job.setJobDuration(request.getJobDuration());
+                    job.setJobDate(request.getJobDate());
+                    job.setWorkOrder(workOrder);
+                    jobRepository.save(job);
+                    return GetJobResponse.builder()
+                            .idJob(job.getIdJob())
+                            .jobName(job.getJobName())
+                            .jobDuration(job.getJobDuration())
+                            .jobDate(job.getJobDate())
+                            .workOrderId(job.getWorkOrder().getIdWorkOrder())
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        return jobResponses;
     }
 
 
@@ -54,6 +63,7 @@ public class JobService {
                 .idJob(job.getIdJob())
                 .jobName(job.getJobName())
                 .jobDuration(job.getJobDuration())
+                .jobDate(job.getJobDate())
                 .workOrderId(job.getWorkOrder().getIdWorkOrder())
                 .build();
     }

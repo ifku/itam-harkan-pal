@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,6 +21,9 @@ public class GetJobResponse {
 
     @JsonProperty("job_duration")
     private Integer jobDuration;
+
+    @JsonProperty("job_date")
+    private Timestamp jobDate;
 
     @JsonProperty("work_order_id")
     private Integer workOrderId;

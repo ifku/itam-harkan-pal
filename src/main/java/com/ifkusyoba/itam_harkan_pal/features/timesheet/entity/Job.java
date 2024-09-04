@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalTime;
+import java.sql.Timestamp;
 
 @Setter
 @Getter
@@ -35,6 +35,9 @@ public class Job extends BaseEntity {
 
     @Column(name = "job_duration")
     private Integer jobDuration;
+
+    @Column(name = "job_date")
+    private Timestamp jobDate;
 
     @ManyToOne
     @JoinColumn(name = "work_order_id")

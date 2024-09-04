@@ -126,11 +126,13 @@ public class WorkOrderService {
                 .build();
     }
 
-    private GetJobResponse mapToJobResponse(Job job) {
+    public GetJobResponse mapToJobResponse(Job job) {
         return GetJobResponse.builder()
                 .idJob(job.getIdJob())
                 .jobName(job.getJobName())
                 .jobDuration(job.getJobDuration())
+                .jobDate(job.getJobDate())
+                .workOrderId(job.getWorkOrder().getIdWorkOrder())
                 .build();
     }
 }
