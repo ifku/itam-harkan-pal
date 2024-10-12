@@ -47,6 +47,23 @@ public class WorkOrderService {
                 .collect(Collectors.toList());
     }
 
+    public List<GetWorkOrderResponse> getWorkOrderByTimesheetId(Integer timesheetId) {
+        List<WorkOrder> workOrders = workOrderRepository.findByTimesheetId(timesheetId)
+                .orElseThrow(() -> new DataNotFoundException("No WorkOrders found for Timesheet with id " + timesheetId));
+
+        return workOrders.stream()
+                .map(workOrder -> GetWorkOrderResponse.builder()
+                        .idWorkOrder(workOrder.getIdWorkOrder())
+                        .workOrderCode(workOrder.getWorkOrderCode())
+                        .workOrderName(workOrder.getWorkOrderName())
+                        .workOrderDuration(workOrder.getWorkOrderDuration())
+                        .timesheetId(workOrder.getTimesheet() != null ? workOrder.getTimesheet().getIdTimesheet() : null)
+                        .getJobResponse(Collections.emptyList())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
     public GetWorkOrderResponse getWorkOrderById(Integer id) {
         WorkOrder workOrder = workOrderRepository.findById(id).orElse(null);
         if (workOrder == null) {

@@ -3,14 +3,12 @@ package com.ifkusyoba.itam_harkan_pal.features.timesheet.service;
 import com.ifkusyoba.itam_harkan_pal.core.exception.DataNotFoundException;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PostTimesheetRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetByIdResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PutTimesheetRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Timesheet;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.TimesheetRepository;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.WorkOrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,15 +38,12 @@ public class TimesheetService {
                 .collect(Collectors.toList());
     }
 
-    public GetTimesheetByIdResponse getTimesheetById(Integer id) {
+    public GetTimesheetResponse getTimesheetById(Integer id) {
         Timesheet timesheet = timesheetRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Timesheet with id " + id + " not found"));
-        return GetTimesheetByIdResponse.builder()
+        return GetTimesheetResponse.builder()
                 .idTimesheet(timesheet.getIdTimesheet())
                 .timesheetName(timesheet.getTimesheetName())
                 .timesheetDate(timesheet.getTimesheetDate())
-                .workOrders(timesheet.getWorkOrders().stream()
-                        .map(this::mapToGetWorkOrderResponse)
-                        .collect(Collectors.toList()))
                 .build();
     }
 
@@ -107,6 +102,9 @@ public class TimesheetService {
                                 .idJob(job.getIdJob())
                                 .jobName(job.getJobName())
                                 .jobDuration(job.getJobDuration())
+                                .jobDate(job.getJobDate())
+                                .workOrderId(job.getWorkOrder().getIdWorkOrder())
+                                .workOrderCode(job.getWorkOrder().getWorkOrderCode())
                                 .build())
                         .collect(Collectors.toList()))
                 .build();

@@ -32,9 +32,27 @@ public class JobService {
                 .collect(Collectors.toList());
     }
 
+    public List<GetJobResponse> getJobsByTimesheetId(Integer timesheetId) {
+        List<Job> jobs = jobRepository.findJobsByTimesheetId(timesheetId)
+                .orElseThrow(() -> new DataNotFoundException("No jobs found for Timesheet with id " + timesheetId));
+
+        return jobs.stream()
+                .map(this::mapToJobResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<GetJobResponse> getJobsByWorkOrderId(Integer workOrderId) {
+        List<Job> jobs = jobRepository.findJobsByWorkOrderId(workOrderId)
+                .orElseThrow(() -> new DataNotFoundException("No jobs found for WorkOrder with id " + workOrderId));
+
+        return jobs.stream()
+                .map(this::mapToJobResponse)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public List<GetJobResponse> createJob(List<PostJobRequest> requests) {
-        List<GetJobResponse> jobResponses = requests.stream()
+        return requests.stream()
                 .map(request -> {
                     Job job = new Job();
                     WorkOrder workOrder = workOrderRepository.findById(request.getWorkOrderId())
@@ -53,8 +71,6 @@ public class JobService {
                             .build();
                 })
                 .collect(Collectors.toList());
-
-        return jobResponses;
     }
 
 
@@ -65,6 +81,7 @@ public class JobService {
                 .jobDuration(job.getJobDuration())
                 .jobDate(job.getJobDate())
                 .workOrderId(job.getWorkOrder().getIdWorkOrder())
+                .workOrderCode(job.getWorkOrder().getWorkOrderCode())
                 .build();
     }
 }

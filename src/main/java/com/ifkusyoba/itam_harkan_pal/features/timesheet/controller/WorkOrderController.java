@@ -46,6 +46,17 @@ public class WorkOrderController {
                 .build();
     }
 
+    @GetMapping("/timesheet/{timesheetId}")
+    @Operation(summary = "Get WorkOrder by Timesheet Id", description = "Get WorkOrder data by Timesheet Id")
+    public WebResponse<List<GetWorkOrderResponse>> getWorkOrderByTimesheetId(@PathVariable Integer timesheetId) {
+        List<GetWorkOrderResponse> getWorkOrderResponses = workOrderService.getWorkOrderByTimesheetId(timesheetId);
+        return WebResponse.<List<GetWorkOrderResponse>>builder()
+                .message("Fetch WorkOrder by Timesheet Id Success")
+                .data(getWorkOrderResponses)
+                .isSuccess(true)
+                .build();
+    }
+
     @PostMapping()
     @Operation(summary = "Create WorkOrder", description = "Create WorkOrder data")
     public WebResponse<GetWorkOrderResponse> createWorkOrder(@RequestBody PostWorkOrderRequest request) {

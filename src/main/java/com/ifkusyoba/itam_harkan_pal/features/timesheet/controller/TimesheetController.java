@@ -1,7 +1,6 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.controller;
 
 import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetByIdResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PostTimesheetRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.PutTimesheetRequest;
@@ -38,9 +37,9 @@ public class TimesheetController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get Timesheet by Id", description = "Get Timesheet data by Id")
-    public WebResponse<GetTimesheetByIdResponse> getTimesheetById(@PathVariable Integer id) {
-        GetTimesheetByIdResponse timesheet = timesheetService.getTimesheetById(id);
-        return WebResponse.<GetTimesheetByIdResponse>builder()
+    public WebResponse<GetTimesheetResponse> getTimesheetById(@PathVariable Integer id) {
+        GetTimesheetResponse timesheet = timesheetService.getTimesheetById(id);
+        return WebResponse.<GetTimesheetResponse>builder()
                 .message("Fetch Timesheet data Success")
                 .data(timesheet)
                 .isSuccess(true)

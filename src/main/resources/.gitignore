@@ -1,2 +1,4 @@
 application.properties
 keystore.p12
+cert.pem
+privatekey.pem

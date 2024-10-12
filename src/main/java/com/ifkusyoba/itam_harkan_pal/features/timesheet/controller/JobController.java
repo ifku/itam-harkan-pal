@@ -34,6 +34,28 @@ public class JobController {
                 .build();
     }
 
+    @GetMapping("/timesheet/{timesheetId}")
+    @Operation(summary = "Get Jobs by Timesheet Id", description = "Get Job data by Timesheet Id")
+    public WebResponse<List<GetJobResponse>> getJobsByTimesheetId(@PathVariable Integer timesheetId) {
+        List<GetJobResponse> jobs = jobService.getJobsByTimesheetId(timesheetId);
+        return WebResponse.<List<GetJobResponse>>builder()
+                .message("Fetch Jobs by Timesheet Id Success")
+                .data(jobs)
+                .isSuccess(true)
+                .build();
+    }
+
+    @GetMapping("/workorder/{workOrderId}")
+    @Operation(summary = "Get Jobs by Work Order Id", description = "Get Job data by Work Order Id")
+    public WebResponse<List<GetJobResponse>> getJobsByWorkOrderId(@PathVariable Integer workOrderId) {
+        List<GetJobResponse> jobs = jobService.getJobsByWorkOrderId(workOrderId);
+        return WebResponse.<List<GetJobResponse>>builder()
+                .message("Fetch Jobs by Work Order Id Success")
+                .data(jobs)
+                .isSuccess(true)
+                .build();
+    }
+
     @PostMapping()
     @Operation(summary = "Create Multiple Jobs", description = "Create multiple job data at once")
     public WebResponse<List<GetJobResponse>> createMultipleJobs(@RequestBody List<PostJobRequest> requests) {
