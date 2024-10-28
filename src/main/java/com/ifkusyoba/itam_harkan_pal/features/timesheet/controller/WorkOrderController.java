@@ -1,18 +1,26 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.controller;
 
-import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PostWorkOrderRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PatchWorkOrderDurationRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PutWorkOrderRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.service.WorkOrderService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.Collections;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PostWorkOrderRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PutWorkOrderRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.service.WorkOrderService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("workorder")
@@ -76,18 +84,6 @@ public class WorkOrderController {
         GetWorkOrderResponse getWorkOrderResponse = workOrderService.updateWorkOrder(id, request);
         return WebResponse.<GetWorkOrderResponse>builder()
                 .message("Update WorkOrder Success")
-                .data(getWorkOrderResponse)
-                .isSuccess(true)
-                .build();
-    }
-
-    @PatchMapping("/update-duration/{id}")
-    @Operation(summary = "Update WorkOrder Duration", description = "Update WorkOrder Duration")
-    public WebResponse<GetWorkOrderResponse> updateWorkOrderDuration(@PathVariable Integer id,
-            @RequestBody PatchWorkOrderDurationRequest request) {
-        GetWorkOrderResponse getWorkOrderResponse = workOrderService.updateWorkOrderDuration(id, request);
-        return WebResponse.<GetWorkOrderResponse>builder()
-                .message("Update WorkOrder Duration Success")
                 .data(getWorkOrderResponse)
                 .isSuccess(true)
                 .build();
