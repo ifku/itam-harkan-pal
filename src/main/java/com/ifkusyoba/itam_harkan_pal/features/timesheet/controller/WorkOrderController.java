@@ -1,6 +1,5 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.controller;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,11 +90,11 @@ public class WorkOrderController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete WorkOrder", description = "Delete WorkOrder data")
-    public WebResponse<List<Void>> deleteWorkOrder(@PathVariable Integer id) {
+    public WebResponse<Void> deleteWorkOrder(@PathVariable Integer id) {
         workOrderService.deleteWorkOrder(id);
-        return WebResponse.<List<Void>>builder()
+        return WebResponse.<Void>builder()
                 .message("Delete WorkOrder Success")
-                .data(Collections.emptyList())
+                .data(null)
                 .isSuccess(true)
                 .build();
     }

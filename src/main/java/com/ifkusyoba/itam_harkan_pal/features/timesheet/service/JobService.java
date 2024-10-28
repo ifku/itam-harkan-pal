@@ -2,6 +2,7 @@ package com.ifkusyoba.itam_harkan_pal.features.timesheet.service;
 
 import com.ifkusyoba.itam_harkan_pal.core.exception.DataNotFoundException;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.PostJobRequest;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.PutJobRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Job;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.management.RuntimeErrorException;
 
 @Service
 public class JobService {
@@ -74,6 +77,33 @@ public class JobService {
                                                         .build();
                                 })
                                 .collect(Collectors.toList());
+        }
+
+        @Transactional
+        public GetJobResponse updateJob(Integer jobId, PutJobRequest request) {
+                try {
+                        Job job = jobRepository.findById(jobId).orElseThrow(() -> new DataNotFoundException(
+                                        "Job not found"));
+                        job.setJobName(request.getJobName());
+                        job.setJobDuration(request.getJobDuration());
+                        job.setJobDate(request.getJobDate());
+                        jobRepository.save(job);
+
+                        return mapToJobResponse(job);
+                } catch (Exception e) {
+                        throw new RuntimeErrorException(null, "Error updating job");
+                }
+        }
+
+        @Transactional
+        public void deleteJob(Integer jobId) {
+                try {
+                        Job job = jobRepository.findById(jobId).orElseThrow(() -> new DataNotFoundException(
+                                        "Job not found"));
+                        jobRepository.delete(job);
+                } catch (Exception e) {
+                        throw new RuntimeErrorException(null, "Error deleting job");
+                }
         }
 
         public GetJobResponse mapToJobResponse(Job job) {
