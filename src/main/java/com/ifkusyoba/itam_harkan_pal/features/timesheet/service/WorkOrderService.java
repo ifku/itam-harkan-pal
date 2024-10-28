@@ -66,6 +66,7 @@ public class WorkOrderService {
                                 .collect(Collectors.toList());
         }
 
+        @Transactional
         public void deleteWorkOrder(Integer id) {
                 try {
                         WorkOrder workOrder = workOrderRepository.findById(id)
