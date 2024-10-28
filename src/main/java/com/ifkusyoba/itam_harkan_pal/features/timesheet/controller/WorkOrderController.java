@@ -95,9 +95,9 @@ public class WorkOrderController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete WorkOrder", description = "Delete WorkOrder data")
-    public WebResponse deleteWorkOrder(@PathVariable Integer id) {
+    public WebResponse<List<Void>> deleteWorkOrder(@PathVariable Integer id) {
         workOrderService.deleteWorkOrder(id);
-        return WebResponse.builder()
+        return WebResponse.<List<Void>>builder()
                 .message("Delete WorkOrder Success")
                 .data(Collections.emptyList())
                 .isSuccess(true)
