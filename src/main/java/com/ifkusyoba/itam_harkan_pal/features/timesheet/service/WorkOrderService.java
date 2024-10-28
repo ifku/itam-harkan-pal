@@ -20,136 +20,138 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.management.RuntimeErrorException;
+
 @Service
 public class WorkOrderService {
-    private final WorkOrderRepository workOrderRepository;
-    private final TimesheetRepository timesheetRepository;
+        private final WorkOrderRepository workOrderRepository;
+        private final TimesheetRepository timesheetRepository;
 
-    @Autowired
-    public WorkOrderService(WorkOrderRepository workOrderRepository, TimesheetRepository timesheetRepository) {
-        this.workOrderRepository = workOrderRepository;
-        this.timesheetRepository = timesheetRepository;
-    }
-
-    public List<GetWorkOrderResponse> getAllWorkOrder() {
-        List<WorkOrder> workOrders = workOrderRepository.findAll();
-        return workOrders.stream()
-                .map(workOrder -> GetWorkOrderResponse.builder()
-                        .idWorkOrder(workOrder.getIdWorkOrder())
-                        .workOrderCode(workOrder.getWorkOrderCode())
-                        .workOrderName(workOrder.getWorkOrderName())
-                        .workOrderDuration(workOrder.getWorkOrderDuration())
-                        .timesheetId(workOrder.getTimesheet() != null ? workOrder.getTimesheet().getIdTimesheet() : null)
-                        .getJobResponse(workOrder.getJobs().stream()
-                                .map(this::mapToJobResponse)
-                                .collect(Collectors.toList()))
-                        .build())
-                .collect(Collectors.toList());
-    }
-
-    public List<GetWorkOrderResponse> getWorkOrderByTimesheetId(Integer timesheetId) {
-        List<WorkOrder> workOrders = workOrderRepository.findByTimesheetId(timesheetId)
-                .orElseThrow(() -> new DataNotFoundException("No WorkOrders found for Timesheet with id " + timesheetId));
-
-        return workOrders.stream()
-                .map(workOrder -> GetWorkOrderResponse.builder()
-                        .idWorkOrder(workOrder.getIdWorkOrder())
-                        .workOrderCode(workOrder.getWorkOrderCode())
-                        .workOrderName(workOrder.getWorkOrderName())
-                        .workOrderDuration(workOrder.getWorkOrderDuration())
-                        .timesheetId(workOrder.getTimesheet() != null ? workOrder.getTimesheet().getIdTimesheet() : null)
-                        .getJobResponse(Collections.emptyList())
-                        .build())
-                .collect(Collectors.toList());
-    }
-
-
-    public GetWorkOrderResponse getWorkOrderById(Integer id) {
-        WorkOrder workOrder = workOrderRepository.findById(id).orElse(null);
-        if (workOrder == null) {
-            throw new DataNotFoundException("WorkOrder with id " + id + " not found");
+        @Autowired
+        public WorkOrderService(WorkOrderRepository workOrderRepository, TimesheetRepository timesheetRepository) {
+                this.workOrderRepository = workOrderRepository;
+                this.timesheetRepository = timesheetRepository;
         }
-        return GetWorkOrderResponse.builder()
-                .idWorkOrder(workOrder.getIdWorkOrder())
-                .workOrderCode(workOrder.getWorkOrderCode())
-                .workOrderName(workOrder.getWorkOrderName())
-                .workOrderDuration(workOrder.getWorkOrderDuration())
-                .timesheetId(workOrder.getTimesheet() != null ? workOrder.getTimesheet().getIdTimesheet() : null)
-                .getJobResponse(workOrder.getJobs().stream()
-                        .map(this::mapToJobResponse)
-                        .collect(Collectors.toList()))
-                .build();
-    }
 
-    @Transactional
-    public GetWorkOrderResponse createWorkOrder(PostWorkOrderRequest request) {
-        Timesheet timesheet = timesheetRepository.findById(request.getTimesheetId())
-                .orElseThrow(() -> new DataNotFoundException("Timesheet with id " + request.getTimesheetId() + " not found"));
-        WorkOrder workOrder = new WorkOrder();
-        workOrder.setWorkOrderCode(request.getWorkOrderCode());
-        workOrder.setWorkOrderName(request.getWorkOrderName());
-        workOrder.setWorkOrderDuration(0);
-        workOrder.setTimesheet(timesheet);
-        workOrderRepository.save(workOrder);
-        return GetWorkOrderResponse.builder()
-                .idWorkOrder(workOrder.getIdWorkOrder())
-                .workOrderCode(workOrder.getWorkOrderCode())
-                .workOrderName(workOrder.getWorkOrderName())
-                .workOrderDuration(workOrder.getWorkOrderDuration())
-                .timesheetId(workOrder.getTimesheet().getIdTimesheet())
-                .getJobResponse(Collections.emptyList())
-                .build();
-    }
-
-    @Transactional
-    public GetWorkOrderResponse updateWorkOrder(Integer id, PutWorkOrderRequest request) {
-        WorkOrder workOrder = workOrderRepository.findById(id).orElseThrow(() -> new DataNotFoundException("WorkOrder with id " + id + " not found"));
-
-        workOrder.setWorkOrderCode(request.getWorkOrderCode());
-        workOrder.setWorkOrderName(request.getWorkOrderName());
-        workOrder.setWorkOrderDuration(request.getWorkOrderDuration());
-        workOrder.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-
-        return GetWorkOrderResponse.builder()
-                .idWorkOrder(workOrder.getIdWorkOrder())
-                .workOrderCode(workOrder.getWorkOrderCode())
-                .workOrderName(workOrder.getWorkOrderName())
-                .workOrderDuration(workOrder.getWorkOrderDuration())
-                .timesheetId(workOrder.getTimesheet() != null ? workOrder.getTimesheet().getIdTimesheet() : null)
-                .getJobResponse(workOrder.getJobs().stream()
-                        .map(this::mapToJobResponse)
-                        .collect(Collectors.toList()))
-                .build();
-    }
-
-    @Transactional
-    public GetWorkOrderResponse updateWorkOrderDuration(Integer id, PatchWorkOrderDurationRequest request) {
-        WorkOrder workOrder = workOrderRepository.findById(id).orElse(null);
-        if (workOrder == null) {
-            throw new DataNotFoundException("WorkOrder with id " + id + " not found");
+        public List<GetWorkOrderResponse> getAllWorkOrder() {
+                List<WorkOrder> workOrders = workOrderRepository.findAll();
+                return workOrders.stream()
+                                .map(workOrder -> GetWorkOrderResponse.builder()
+                                                .idWorkOrder(workOrder.getIdWorkOrder())
+                                                .workOrderCode(workOrder.getWorkOrderCode())
+                                                .workOrderName(workOrder.getWorkOrderName())
+                                                .workOrderDuration(workOrder.getWorkOrderDuration())
+                                                .timesheetId(workOrder.getTimesheet() != null
+                                                                ? workOrder.getTimesheet().getIdTimesheet()
+                                                                : null)
+                                                .build())
+                                .collect(Collectors.toList());
         }
-        workOrder.setWorkOrderDuration(request.getWorkOrderDuration());
-        workOrder.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        workOrderRepository.save(workOrder);
-        return GetWorkOrderResponse.builder()
-                .idWorkOrder(workOrder.getIdWorkOrder())
-                .workOrderCode(workOrder.getWorkOrderCode())
-                .workOrderName(workOrder.getWorkOrderName())
-                .workOrderDuration(workOrder.getWorkOrderDuration())
-                .timesheetId(workOrder.getTimesheet() != null ? workOrder.getTimesheet().getIdTimesheet() : null)
-                .getJobResponse(workOrder.getJobs().stream()
-                        .map(this::mapToJobResponse)
-                        .collect(Collectors.toList()))
-                .build();
-    }
 
-    public GetJobResponse mapToJobResponse(Job job) {
-        return GetJobResponse.builder()
-                .idJob(job.getIdJob())
-                .jobName(job.getJobName())
-                .jobDuration(job.getJobDuration())
-                .jobDate(job.getJobDate())
-                .workOrderId(job.getWorkOrder().getIdWorkOrder())
-                .build();
-    }
+        public List<GetWorkOrderResponse> getWorkOrderByTimesheetId(Integer timesheetId) {
+                List<WorkOrder> workOrders = workOrderRepository.findByTimesheetId(timesheetId)
+                                .orElseThrow(() -> new DataNotFoundException(
+                                                "No WorkOrders found for Timesheet with id " + timesheetId));
+
+                return workOrders.stream()
+                                .map(workOrder -> GetWorkOrderResponse.builder()
+                                                .idWorkOrder(workOrder.getIdWorkOrder())
+                                                .workOrderCode(workOrder.getWorkOrderCode())
+                                                .workOrderName(workOrder.getWorkOrderName())
+                                                .workOrderDuration(workOrder.getWorkOrderDuration())
+                                                .timesheetId(workOrder.getTimesheet() != null
+                                                                ? workOrder.getTimesheet().getIdTimesheet()
+                                                                : null)
+                                                .build())
+                                .collect(Collectors.toList());
+        }
+
+        public void deleteWorkOrder(Integer id) {
+                try {
+                        WorkOrder workOrder = workOrderRepository.findById(id)
+                                        .orElseThrow(() -> new DataNotFoundException(
+                                                        "WorkOrder with id " + id + " not found"));
+                        workOrderRepository.delete(workOrder);
+                } catch (Exception e) {
+                        throw new RuntimeErrorException(new Error("Failed to delete WorkOrder with id " + id));
+                }
+        }
+
+        public GetWorkOrderResponse getWorkOrderById(Integer id) {
+                WorkOrder workOrder = workOrderRepository.findById(id).orElse(null);
+                if (workOrder == null) {
+                        throw new DataNotFoundException("WorkOrder with id " + id + " not found");
+                }
+                return GetWorkOrderResponse.builder()
+                                .idWorkOrder(workOrder.getIdWorkOrder())
+                                .workOrderCode(workOrder.getWorkOrderCode())
+                                .workOrderName(workOrder.getWorkOrderName())
+                                .workOrderDuration(workOrder.getWorkOrderDuration())
+                                .timesheetId(workOrder.getTimesheet() != null
+                                                ? workOrder.getTimesheet().getIdTimesheet()
+                                                : null)
+                                .build();
+        }
+
+        @Transactional
+        public GetWorkOrderResponse createWorkOrder(PostWorkOrderRequest request) {
+                Timesheet timesheet = timesheetRepository.findById(request.getTimesheetId())
+                                .orElseThrow(() -> new DataNotFoundException(
+                                                "Timesheet with id " + request.getTimesheetId() + " not found"));
+                WorkOrder workOrder = new WorkOrder();
+                workOrder.setWorkOrderCode(request.getWorkOrderCode());
+                workOrder.setWorkOrderName(request.getWorkOrderName());
+                workOrder.setWorkOrderDuration(0);
+                workOrder.setTimesheet(timesheet);
+                workOrderRepository.save(workOrder);
+                return GetWorkOrderResponse.builder()
+                                .idWorkOrder(workOrder.getIdWorkOrder())
+                                .workOrderCode(workOrder.getWorkOrderCode())
+                                .workOrderName(workOrder.getWorkOrderName())
+                                .workOrderDuration(workOrder.getWorkOrderDuration())
+                                .timesheetId(workOrder.getTimesheet().getIdTimesheet())
+                                .build();
+        }
+
+        @Transactional
+        public GetWorkOrderResponse updateWorkOrder(Integer id, PutWorkOrderRequest request) {
+                WorkOrder workOrder = workOrderRepository.findById(id)
+                                .orElseThrow(() -> new DataNotFoundException("WorkOrder with id " + id + " not found"));
+
+                workOrder.setWorkOrderCode(request.getWorkOrderCode());
+                workOrder.setWorkOrderName(request.getWorkOrderName());
+                workOrder.setWorkOrderDuration(request.getWorkOrderDuration());
+                workOrder.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+                return GetWorkOrderResponse.builder()
+                                .idWorkOrder(workOrder.getIdWorkOrder())
+                                .workOrderCode(workOrder.getWorkOrderCode())
+                                .workOrderName(workOrder.getWorkOrderName())
+                                .workOrderDuration(workOrder.getWorkOrderDuration())
+                                .timesheetId(workOrder.getTimesheet() != null
+                                                ? workOrder.getTimesheet().getIdTimesheet()
+                                                : null)
+                                .build();
+        }
+
+        @Transactional
+        public GetWorkOrderResponse updateWorkOrderDuration(Integer id, PatchWorkOrderDurationRequest request) {
+                WorkOrder workOrder = workOrderRepository.findById(id).orElse(null);
+                if (workOrder == null) {
+                        throw new DataNotFoundException("WorkOrder with id " + id + " not found");
+                }
+                workOrder.setWorkOrderDuration(request.getWorkOrderDuration());
+                workOrder.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+                workOrderRepository.save(workOrder);
+                return GetWorkOrderResponse.builder()
+                                .idWorkOrder(workOrder.getIdWorkOrder())
+                                .workOrderCode(workOrder.getWorkOrderCode())
+                                .workOrderName(workOrder.getWorkOrderName())
+                                .workOrderDuration(workOrder.getWorkOrderDuration())
+                                .timesheetId(workOrder.getTimesheet() != null
+                                                ? workOrder.getTimesheet().getIdTimesheet()
+                                                : null)
+                                .build();
+        }
+
 }

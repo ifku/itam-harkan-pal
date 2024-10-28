@@ -16,72 +16,74 @@ import java.util.stream.Collectors;
 
 @Service
 public class JobService {
-    private final JobRepository jobRepository;
-    private final WorkOrderRepository workOrderRepository;
+        private final JobRepository jobRepository;
+        private final WorkOrderRepository workOrderRepository;
 
-    @Autowired
-    public JobService(JobRepository jobRepository, WorkOrderRepository workOrderRepository) {
-        this.jobRepository = jobRepository;
-        this.workOrderRepository = workOrderRepository;
-    }
+        @Autowired
+        public JobService(JobRepository jobRepository, WorkOrderRepository workOrderRepository) {
+                this.jobRepository = jobRepository;
+                this.workOrderRepository = workOrderRepository;
+        }
 
-    public List<GetJobResponse> getAllJob() {
-        List<Job> jobs = jobRepository.findAll();
-        return jobs.stream()
-                .map(this::mapToJobResponse)
-                .collect(Collectors.toList());
-    }
+        public List<GetJobResponse> getAllJob() {
+                List<Job> jobs = jobRepository.findAll();
+                return jobs.stream()
+                                .map(this::mapToJobResponse)
+                                .collect(Collectors.toList());
+        }
 
-    public List<GetJobResponse> getJobsByTimesheetId(Integer timesheetId) {
-        List<Job> jobs = jobRepository.findJobsByTimesheetId(timesheetId)
-                .orElseThrow(() -> new DataNotFoundException("No jobs found for Timesheet with id " + timesheetId));
+        public List<GetJobResponse> getJobsByTimesheetId(Integer timesheetId) {
+                List<Job> jobs = jobRepository.findJobsByTimesheetId(timesheetId)
+                                .orElseThrow(() -> new DataNotFoundException(
+                                                "No jobs found for Timesheet with id " + timesheetId));
 
-        return jobs.stream()
-                .map(this::mapToJobResponse)
-                .collect(Collectors.toList());
-    }
+                return jobs.stream()
+                                .map(this::mapToJobResponse)
+                                .collect(Collectors.toList());
+        }
 
-    public List<GetJobResponse> getJobsByWorkOrderId(Integer workOrderId) {
-        List<Job> jobs = jobRepository.findJobsByWorkOrderId(workOrderId)
-                .orElseThrow(() -> new DataNotFoundException("No jobs found for WorkOrder with id " + workOrderId));
+        public List<GetJobResponse> getJobsByWorkOrderId(Integer workOrderId) {
+                List<Job> jobs = jobRepository.findJobsByWorkOrderId(workOrderId)
+                                .orElseThrow(() -> new DataNotFoundException(
+                                                "No jobs found for WorkOrder with id " + workOrderId));
 
-        return jobs.stream()
-                .map(this::mapToJobResponse)
-                .collect(Collectors.toList());
-    }
+                return jobs.stream()
+                                .map(this::mapToJobResponse)
+                                .collect(Collectors.toList());
+        }
 
-    @Transactional
-    public List<GetJobResponse> createJob(List<PostJobRequest> requests) {
-        return requests.stream()
-                .map(request -> {
-                    Job job = new Job();
-                    WorkOrder workOrder = workOrderRepository.findById(request.getWorkOrderId())
-                            .orElseThrow(() -> new DataNotFoundException("WorkOrder not found"));
-                    job.setJobName(request.getJobName());
-                    job.setJobDuration(request.getJobDuration());
-                    job.setJobDate(request.getJobDate());
-                    job.setWorkOrder(workOrder);
-                    jobRepository.save(job);
-                    return GetJobResponse.builder()
-                            .idJob(job.getIdJob())
-                            .jobName(job.getJobName())
-                            .jobDuration(job.getJobDuration())
-                            .jobDate(job.getJobDate())
-                            .workOrderId(job.getWorkOrder().getIdWorkOrder())
-                            .build();
-                })
-                .collect(Collectors.toList());
-    }
+        @Transactional
+        public List<GetJobResponse> createJob(List<PostJobRequest> requests) {
+                return requests.stream()
+                                .map(request -> {
+                                        Job job = new Job();
+                                        WorkOrder workOrder = workOrderRepository.findById(request.getWorkOrderId())
+                                                        .orElseThrow(() -> new DataNotFoundException(
+                                                                        "WorkOrder not found"));
+                                        job.setJobName(request.getJobName());
+                                        job.setJobDuration(request.getJobDuration());
+                                        job.setJobDate(request.getJobDate());
+                                        job.setWorkOrder(workOrder);
+                                        jobRepository.save(job);
+                                        return GetJobResponse.builder()
+                                                        .idJob(job.getIdJob())
+                                                        .jobName(job.getJobName())
+                                                        .jobDuration(job.getJobDuration())
+                                                        .jobDate(job.getJobDate())
+                                                        .workOrderId(job.getWorkOrder().getIdWorkOrder())
+                                                        .build();
+                                })
+                                .collect(Collectors.toList());
+        }
 
-
-    public GetJobResponse mapToJobResponse(Job job) {
-        return GetJobResponse.builder()
-                .idJob(job.getIdJob())
-                .jobName(job.getJobName())
-                .jobDuration(job.getJobDuration())
-                .jobDate(job.getJobDate())
-                .workOrderId(job.getWorkOrder().getIdWorkOrder())
-                .workOrderCode(job.getWorkOrder().getWorkOrderCode())
-                .build();
-    }
+        public GetJobResponse mapToJobResponse(Job job) {
+                return GetJobResponse.builder()
+                                .idJob(job.getIdJob())
+                                .jobName(job.getJobName())
+                                .jobDuration(job.getJobDuration())
+                                .jobDate(job.getJobDate())
+                                .workOrderId(job.getWorkOrder().getIdWorkOrder())
+                                .workOrderCode(job.getWorkOrder().getWorkOrderCode())
+                                .build();
+        }
 }

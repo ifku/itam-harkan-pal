@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -70,7 +71,8 @@ public class WorkOrderController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update WorkOrder", description = "Update WorkOrder data")
-    public WebResponse<GetWorkOrderResponse> updateWorkOrder(@PathVariable Integer id, @RequestBody PutWorkOrderRequest request) {
+    public WebResponse<GetWorkOrderResponse> updateWorkOrder(@PathVariable Integer id,
+            @RequestBody PutWorkOrderRequest request) {
         GetWorkOrderResponse getWorkOrderResponse = workOrderService.updateWorkOrder(id, request);
         return WebResponse.<GetWorkOrderResponse>builder()
                 .message("Update WorkOrder Success")
@@ -81,11 +83,23 @@ public class WorkOrderController {
 
     @PatchMapping("/update-duration/{id}")
     @Operation(summary = "Update WorkOrder Duration", description = "Update WorkOrder Duration")
-    public WebResponse<GetWorkOrderResponse> updateWorkOrderDuration(@PathVariable Integer id, @RequestBody PatchWorkOrderDurationRequest request) {
+    public WebResponse<GetWorkOrderResponse> updateWorkOrderDuration(@PathVariable Integer id,
+            @RequestBody PatchWorkOrderDurationRequest request) {
         GetWorkOrderResponse getWorkOrderResponse = workOrderService.updateWorkOrderDuration(id, request);
         return WebResponse.<GetWorkOrderResponse>builder()
                 .message("Update WorkOrder Duration Success")
                 .data(getWorkOrderResponse)
+                .isSuccess(true)
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete WorkOrder", description = "Delete WorkOrder data")
+    public WebResponse deleteWorkOrder(@PathVariable Integer id) {
+        workOrderService.deleteWorkOrder(id);
+        return WebResponse.builder()
+                .message("Delete WorkOrder Success")
+                .data(Collections.emptyList())
                 .isSuccess(true)
                 .build();
     }

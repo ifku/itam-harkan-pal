@@ -29,7 +29,4 @@ public class GetWorkOrderResponse {
 
     @JsonProperty("timesheet_id")
     private Integer timesheetId;
-
-    @JsonProperty("jobs")
-    private List<GetJobResponse> getJobResponse;
 }
