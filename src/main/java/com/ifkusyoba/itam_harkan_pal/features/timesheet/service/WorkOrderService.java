@@ -9,6 +9,7 @@ import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PutWorkOrd
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Job;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Timesheet;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.JobRepository;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.TimesheetRepository;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.WorkOrderRepository;
 import jakarta.transaction.Transactional;
@@ -16,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,11 +26,14 @@ import javax.management.RuntimeErrorException;
 public class WorkOrderService {
         private final WorkOrderRepository workOrderRepository;
         private final TimesheetRepository timesheetRepository;
+        private final JobRepository jobRepository;
 
         @Autowired
-        public WorkOrderService(WorkOrderRepository workOrderRepository, TimesheetRepository timesheetRepository) {
+        public WorkOrderService(WorkOrderRepository workOrderRepository, TimesheetRepository timesheetRepository,
+                        JobRepository jobRepository) {
                 this.workOrderRepository = workOrderRepository;
                 this.timesheetRepository = timesheetRepository;
+                this.jobRepository = jobRepository;
         }
 
         public List<GetWorkOrderResponse> getAllWorkOrder() {
@@ -72,6 +75,10 @@ public class WorkOrderService {
                         WorkOrder workOrder = workOrderRepository.findById(id)
                                         .orElseThrow(() -> new DataNotFoundException(
                                                         "WorkOrder with id " + id + " not found"));
+                        List<Job> jobs = workOrder.getJobs();
+                        if (jobs != null) {
+                                jobRepository.deleteAll(jobs);
+                        }
                         workOrderRepository.delete(workOrder);
                 } catch (Exception e) {
                         throw new RuntimeErrorException(new Error("Failed to delete WorkOrder with id " + id));
