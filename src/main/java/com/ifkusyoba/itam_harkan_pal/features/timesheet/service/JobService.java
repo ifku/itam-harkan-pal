@@ -87,6 +87,13 @@ public class JobService {
                         job.setJobName(request.getJobName());
                         job.setJobDuration(request.getJobDuration());
                         job.setJobDate(request.getJobDate());
+
+                        if (request.getWorkOrderId() != null) {
+                                WorkOrder workOrder = workOrderRepository.findById(request.getWorkOrderId())
+                                                .orElseThrow(() -> new DataNotFoundException(
+                                                                "WorkOrder not found"));
+                                job.setWorkOrder(workOrder);
+                        }
                         jobRepository.save(job);
 
                         return mapToJobResponse(job);

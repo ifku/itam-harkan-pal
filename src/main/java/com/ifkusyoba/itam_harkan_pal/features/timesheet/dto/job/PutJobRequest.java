@@ -29,14 +29,9 @@ public class PutJobRequest {
     @NotBlank(message = "job_date must not be blank")
     private Timestamp jobDate;
 
-    // @JsonProperty("work_order_code")
-    // @NotBlank(message = "work_order_code must not be blank")
-    // @Size(max = 24)
-    // private String workOrderCode;
-
-    // @JsonProperty("work_order_id")
-    // @NotBlank(message = "work_order_id must not be blank")
-    // @Size(max = 24)
-    // private Integer workOrderId;
+    @JsonProperty("work_order_id")
+    @NotBlank(message = "work_order_id must not be blank")
+    @Size(max = 24)
+    private Integer workOrderId;
 
 }
