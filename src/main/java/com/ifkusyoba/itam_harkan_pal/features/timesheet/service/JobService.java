@@ -121,6 +121,7 @@ public class JobService {
                                 .jobDate(job.getJobDate())
                                 .workOrderId(job.getWorkOrder().getIdWorkOrder())
                                 .workOrderCode(job.getWorkOrder().getWorkOrderCode())
+                                .workOrderName(job.getWorkOrder().getWorkOrderName())
                                 .build();
         }
 }

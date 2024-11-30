@@ -30,4 +30,8 @@ public class GetJobResponse {
 
     @JsonProperty("work_order_code")
     private Integer workOrderCode;
+
+    @JsonProperty("work_order_name")
+    private String workOrderName;
+    
 }
