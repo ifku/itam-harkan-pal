@@ -1,13 +1,11 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,6 +24,9 @@ public class GetWorkOrderResponse {
 
     @JsonProperty("work_order_duration")
     private Integer workOrderDuration;
+
+    @JsonProperty("work_order_duration_limit")
+    private Integer workOrderDurationLimit;
 
     @JsonProperty("timesheet_id")
     private Integer timesheetId;

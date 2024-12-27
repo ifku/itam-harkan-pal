@@ -23,7 +23,7 @@ public class PutWorkOrderRequest {
     @Size(max = 255, min = 4)
     private String workOrderName;
 
-    @JsonProperty("work_order_duration")
-    @NotBlank(message = "work_order_duration must not be blank")
-    private Integer workOrderDuration;
+    @JsonProperty("work_order_duration_limit")
+    @NotBlank(message = "work_order_duration_limit must not be blank")
+    private Integer workOrderDurationLimit;
 }

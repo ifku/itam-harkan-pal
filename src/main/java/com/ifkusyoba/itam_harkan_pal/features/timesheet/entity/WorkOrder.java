@@ -19,12 +19,7 @@ public class WorkOrder extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "work_order_seq")
-    @SequenceGenerator(
-            name = "work_order_seq",
-            sequenceName = "work_order_seq",
-            initialValue = 101,
-            allocationSize = 1
-    )
+    @SequenceGenerator(name = "work_order_seq", sequenceName = "work_order_seq", initialValue = 101, allocationSize = 1)
     @Column(name = "id_work_order")
     private Integer idWorkOrder;
 
@@ -33,6 +28,9 @@ public class WorkOrder extends BaseEntity {
 
     @Column(name = "work_order_name")
     private String workOrderName;
+
+    @Column(name = "work_order_duration_limit")
+    private Integer workOrderDurationLimit;
 
     @Column(name = "work_order_duration")
     private Integer workOrderDuration;

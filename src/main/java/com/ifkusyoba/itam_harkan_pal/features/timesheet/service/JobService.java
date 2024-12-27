@@ -1,6 +1,7 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.service;
 
 import com.ifkusyoba.itam_harkan_pal.core.exception.DataNotFoundException;
+import com.ifkusyoba.itam_harkan_pal.core.exception.OutOfTimeException;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.PostJobRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.PutJobRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
@@ -63,11 +64,30 @@ public class JobService {
                                         WorkOrder workOrder = workOrderRepository.findById(request.getWorkOrderId())
                                                         .orElseThrow(() -> new DataNotFoundException(
                                                                         "WorkOrder not found"));
+                                        if (workOrder.getWorkOrderDuration() == 0
+                                                        || workOrder.getWorkOrderDuration() == null) {
+                                                throw new OutOfTimeException(
+                                                                "Job duration exceeds work order duration");
+                                        }
+
+                                        if (request.getJobDuration() > workOrder.getWorkOrderDuration()) {
+                                                throw new OutOfTimeException(
+                                                                String.format("Job duration (%.1f) exceeds work order remaining duration (%.1f)",
+                                                                                request.getJobDuration(),
+                                                                                workOrder.getWorkOrderDuration()));
+                                        }
+
                                         job.setJobName(request.getJobName());
                                         job.setJobDuration(request.getJobDuration());
                                         job.setJobDate(request.getJobDate());
                                         job.setWorkOrder(workOrder);
+
+                                        workOrder.setWorkOrderDuration(
+                                                        workOrder.getWorkOrderDuration() - request.getJobDuration());
+                                        workOrderRepository.save(workOrder);
+
                                         jobRepository.save(job);
+
                                         return GetJobResponse.builder()
                                                         .idJob(job.getIdJob())
                                                         .jobName(job.getJobName())
@@ -81,35 +101,73 @@ public class JobService {
 
         @Transactional
         public GetJobResponse updateJob(Integer jobId, PutJobRequest request) {
-                try {
-                        Job job = jobRepository.findById(jobId).orElseThrow(() -> new DataNotFoundException(
-                                        "Job not found"));
-                        job.setJobName(request.getJobName());
-                        job.setJobDuration(request.getJobDuration());
-                        job.setJobDate(request.getJobDate());
+                Job job = jobRepository.findById(jobId)
+                                .orElseThrow(() -> new DataNotFoundException("Job not found"));
 
-                        if (request.getWorkOrderId() != null) {
-                                WorkOrder workOrder = workOrderRepository.findById(request.getWorkOrderId())
-                                                .orElseThrow(() -> new DataNotFoundException(
-                                                                "WorkOrder not found"));
-                                job.setWorkOrder(workOrder);
+                // Store original duration for calculating difference
+                Integer originalDuration = job.getJobDuration();
+
+                // Handle work order change if requested
+                WorkOrder workOrder;
+                if (request.getWorkOrderId() != null
+                                && !request.getWorkOrderId().equals(job.getWorkOrder().getIdWorkOrder())) {
+                        // Return duration to original work order
+                        WorkOrder originalWorkOrder = job.getWorkOrder();
+                        originalWorkOrder.setWorkOrderDuration(
+                                        originalWorkOrder.getWorkOrderDuration() + originalDuration);
+                        workOrderRepository.save(originalWorkOrder);
+
+                        // Get and validate new work order
+                        workOrder = workOrderRepository.findById(request.getWorkOrderId())
+                                        .orElseThrow(() -> new DataNotFoundException("WorkOrder not found"));
+
+                        if (request.getJobDuration() > workOrder.getWorkOrderDuration()) {
+                                throw new OutOfTimeException(
+                                                String.format("Job duration (%.1f) exceeds work order remaining duration (%.1f)",
+                                                                request.getJobDuration(),
+                                                                workOrder.getWorkOrderDuration()));
                         }
-                        jobRepository.save(job);
 
-                        return mapToJobResponse(job);
-                } catch (Exception e) {
-                        throw new RuntimeErrorException(null, "Error updating job");
+                        workOrder.setWorkOrderDuration(workOrder.getWorkOrderDuration() - request.getJobDuration());
+                        job.setWorkOrder(workOrder);
+                } else {
+                        workOrder = job.getWorkOrder();
+                        Integer durationDifference = request.getJobDuration() - originalDuration;
+
+                        if (durationDifference > workOrder.getWorkOrderDuration()) {
+                                throw new OutOfTimeException(
+                                                String.format("New job duration would exceed work order remaining duration by %.1f",
+                                                                durationDifference - workOrder.getWorkOrderDuration()));
+                        }
+
+                        workOrder.setWorkOrderDuration(workOrder.getWorkOrderDuration() - durationDifference);
                 }
+
+                // Update job details
+                job.setJobName(request.getJobName());
+                job.setJobDuration(request.getJobDuration());
+                job.setJobDate(request.getJobDate());
+
+                // Save both entities
+                workOrderRepository.save(workOrder);
+                jobRepository.save(job);
+
+                return mapToJobResponse(job);
         }
 
         @Transactional
         public void deleteJob(Integer jobId) {
                 try {
-                        Job job = jobRepository.findById(jobId).orElseThrow(() -> new DataNotFoundException(
-                                        "Job not found"));
+                        Job job = jobRepository.findById(jobId)
+                                        .orElseThrow(() -> new DataNotFoundException("Job not found"));
+                        WorkOrder workOrder = job.getWorkOrder();
+                        workOrder.setWorkOrderDuration(workOrder.getWorkOrderDuration() + job.getJobDuration());
+                        workOrderRepository.save(workOrder);
                         jobRepository.delete(job);
+                } catch (DataNotFoundException e) {
+                        throw e;
                 } catch (Exception e) {
-                        throw new RuntimeErrorException(null, "Error deleting job");
+                        throw new RuntimeException("Error deleting job: " + e.getMessage());
                 }
         }
 

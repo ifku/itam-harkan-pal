@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS tb_work_order
     id_work_order       INTEGER PRIMARY KEY DEFAULT nextval('work_order_seq'),
     work_order_code     INTEGER      NOT NULL,
     work_order_name     VARCHAR(255) NOT NULL,
-    work_order_duration INTEGER      NOT NULL,
+    work_order_duration INTEGER,
+    work_order_duration_limit   INTEGER NOT NULL,
     timesheet_id        INTEGER,
     created_at          TIMESTAMP           DEFAULT CURRENT_TIMESTAMP,
     updated_at          TIMESTAMP           DEFAULT CURRENT_TIMESTAMP,
@@ -54,5 +55,5 @@ CREATE TABLE IF NOT EXISTS tb_jobs
 
 
 INSERT INTO tb_timesheet (timesheet_name, timesheet_date) VALUES ('Timesheet Seeder', '2021-01-01 00:00:00');
-INSERT INTO tb_work_order (work_order_code, work_order_name, work_order_duration, timesheet_id) VALUES (107, 'Work Order Seeder', 10, 101);
+INSERT INTO tb_work_order (work_order_code, work_order_name, work_order_duration, work_order_duration_limit, timesheet_id) VALUES (107, 'Work Order Seeder', null, 10,  101);
 INSERT INTO tb_jobs (job_name, job_duration, job_date, work_order_id) VALUES ('Job Seeder', 10, '2021-01-01 00:00:00', 101);

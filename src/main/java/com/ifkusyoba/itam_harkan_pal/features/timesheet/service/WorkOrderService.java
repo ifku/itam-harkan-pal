@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ifkusyoba.itam_harkan_pal.core.exception.DataNotFoundException;
+import com.ifkusyoba.itam_harkan_pal.core.exception.TimeLimitExceededException;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PostWorkOrderRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.PutWorkOrderRequest;
@@ -44,6 +45,7 @@ public class WorkOrderService {
                                                 .workOrderCode(workOrder.getWorkOrderCode())
                                                 .workOrderName(workOrder.getWorkOrderName())
                                                 .workOrderDuration(workOrder.getWorkOrderDuration())
+                                                .workOrderDurationLimit(workOrder.getWorkOrderDurationLimit())
                                                 .timesheetId(workOrder.getTimesheet() != null
                                                                 ? workOrder.getTimesheet().getIdTimesheet()
                                                                 : null)
@@ -62,6 +64,7 @@ public class WorkOrderService {
                                                 .workOrderCode(workOrder.getWorkOrderCode())
                                                 .workOrderName(workOrder.getWorkOrderName())
                                                 .workOrderDuration(workOrder.getWorkOrderDuration())
+                                                .workOrderDurationLimit(workOrder.getWorkOrderDurationLimit())
                                                 .timesheetId(workOrder.getTimesheet() != null
                                                                 ? workOrder.getTimesheet().getIdTimesheet()
                                                                 : null)
@@ -95,6 +98,7 @@ public class WorkOrderService {
                                 .workOrderCode(workOrder.getWorkOrderCode())
                                 .workOrderName(workOrder.getWorkOrderName())
                                 .workOrderDuration(workOrder.getWorkOrderDuration())
+                                .workOrderDurationLimit(workOrder.getWorkOrderDurationLimit())
                                 .timesheetId(workOrder.getTimesheet() != null
                                                 ? workOrder.getTimesheet().getIdTimesheet()
                                                 : null)
@@ -109,7 +113,8 @@ public class WorkOrderService {
                 WorkOrder workOrder = new WorkOrder();
                 workOrder.setWorkOrderCode(request.getWorkOrderCode());
                 workOrder.setWorkOrderName(request.getWorkOrderName());
-                workOrder.setWorkOrderDuration(0);
+                workOrder.setWorkOrderDuration(null);
+                workOrder.setWorkOrderDurationLimit(0);
                 workOrder.setTimesheet(timesheet);
                 workOrderRepository.save(workOrder);
                 return GetWorkOrderResponse.builder()
@@ -117,6 +122,7 @@ public class WorkOrderService {
                                 .workOrderCode(workOrder.getWorkOrderCode())
                                 .workOrderName(workOrder.getWorkOrderName())
                                 .workOrderDuration(workOrder.getWorkOrderDuration())
+                                .workOrderDurationLimit(workOrder.getWorkOrderDurationLimit())
                                 .timesheetId(workOrder.getTimesheet().getIdTimesheet())
                                 .build();
         }
@@ -128,7 +134,20 @@ public class WorkOrderService {
 
                 workOrder.setWorkOrderCode(request.getWorkOrderCode());
                 workOrder.setWorkOrderName(request.getWorkOrderName());
-                workOrder.setWorkOrderDuration(request.getWorkOrderDuration());
+
+                if (workOrder.getWorkOrderDuration() == null) {
+                        // If Work Order Duration is null, set it to the value of Work Order Duration Limit
+                        workOrder.setWorkOrderDuration(request.getWorkOrderDurationLimit());
+                        workOrder.setWorkOrderDurationLimit(request.getWorkOrderDurationLimit());
+                } else {
+                        if (request.getWorkOrderDurationLimit() < workOrder.getWorkOrderDuration()) {
+                                throw new TimeLimitExceededException(
+                                                "Work Order Duration must be greater than or equal to Work Order Duration");
+                        } else {
+                                workOrder.setWorkOrderDurationLimit(request.getWorkOrderDurationLimit());
+                        }
+                }
+
                 workOrder.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
                 return GetWorkOrderResponse.builder()
@@ -136,6 +155,7 @@ public class WorkOrderService {
                                 .workOrderCode(workOrder.getWorkOrderCode())
                                 .workOrderName(workOrder.getWorkOrderName())
                                 .workOrderDuration(workOrder.getWorkOrderDuration())
+                                .workOrderDurationLimit(workOrder.getWorkOrderDurationLimit())
                                 .timesheetId(workOrder.getTimesheet() != null
                                                 ? workOrder.getTimesheet().getIdTimesheet()
                                                 : null)
