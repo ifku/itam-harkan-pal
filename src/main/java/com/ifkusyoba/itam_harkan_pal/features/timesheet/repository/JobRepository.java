@@ -1,8 +1,11 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.repository;
 
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Job;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

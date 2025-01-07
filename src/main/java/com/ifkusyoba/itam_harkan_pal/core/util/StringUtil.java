@@ -1,5 +1,6 @@
 package com.ifkusyoba.itam_harkan_pal.core.util;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -89,7 +90,8 @@ public class StringUtil {
     }
 
     /**
-     * Truncates a string to a specified length, appending "..." if it exceeds the length.
+     * Truncates a string to a specified length, appending "..." if it exceeds the
+     * length.
      *
      * @param str    the string to truncate
      * @param length the maximum length
@@ -126,5 +128,22 @@ public class StringUtil {
             return str;
         }
         return str.toLowerCase();
+    }
+
+    public static String generateRandomString(int length) {
+        if (length <= 0) {
+            throw new IllegalArgumentException("Length must be greater than 0");
+        }
+
+        SecureRandom randomizer = new SecureRandom();
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder sb = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            int randomIndex = randomizer.nextInt(characters.length());
+            sb.append(characters.charAt(randomIndex));
+        }
+
+        return sb.toString();
     }
 }

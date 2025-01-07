@@ -97,6 +97,19 @@
 			<version>10.17.2</version>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- Export file to Excel & PDF -->
+		<dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+
+		<dependency>
+            <groupId>com.github.librepdf</groupId>
+            <artifactId>openpdf</artifactId>
+            <version>1.3.8</version>
+        </dependency>
 	</dependencies>
 
 	<build>
