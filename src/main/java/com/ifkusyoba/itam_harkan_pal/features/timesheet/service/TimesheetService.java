@@ -114,7 +114,17 @@ public class TimesheetService {
                 IndexedColors[] colors = {
                                 IndexedColors.LIGHT_YELLOW,
                                 IndexedColors.LIGHT_GREEN,
-                                IndexedColors.LIGHT_TURQUOISE
+                                IndexedColors.LIGHT_TURQUOISE,
+                                IndexedColors.LIGHT_BLUE,
+                                IndexedColors.LIGHT_ORANGE,
+                                IndexedColors.LIGHT_CORNFLOWER_BLUE,
+                                IndexedColors.PALE_BLUE,
+                                IndexedColors.LAVENDER,
+                                IndexedColors.ROSE,
+                                IndexedColors.TAN,
+                                IndexedColors.LEMON_CHIFFON,
+                                IndexedColors.AQUA,
+                                IndexedColors.GREY_25_PERCENT
                 };
 
                 for (int i = 0; i < workOrderStyles.length; i++) {
