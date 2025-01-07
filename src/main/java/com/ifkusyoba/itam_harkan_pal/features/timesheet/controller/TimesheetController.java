@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -91,11 +93,13 @@ public class TimesheetController {
     @Operation(summary = "Export Timesheet to Excel", description = "Export Timesheet Data by Id")
     public ResponseEntity<byte[]> exportTimesheetToExcel(@PathVariable Integer id) throws IOException {
         byte[] excelContent = timesheetService.exportTimesheetToExcel(id);
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDisposition(ContentDisposition.attachment()
-                .filename("timesheet-" + id + StringUtil.generateRandomString(8) + "-" + ".xlsx").build());
+                .filename("timesheet-" + id + "-" + timestamp + "-" + StringUtil.generateRandomString(8) + ".xlsx")
+                .build());
 
         return new ResponseEntity<>(excelContent, headers, HttpStatus.OK);
     }
