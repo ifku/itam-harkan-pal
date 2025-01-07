@@ -103,7 +103,7 @@ public class TimesheetService {
                 headerStyle.setFont(headerFont);
 
                 Row headerRow = sheet.createRow(0);
-                String[] headers = { "Tanggal", "Deskripsi Pekerjaan", "Kode WorkOrder", "Jam", "Work Order" };
+                String[] headers = { "Tanggal", "Nama Pekerjaan", "Kode WorkOrder", "Jam", "Nama Work Order" };
                 for (int i = 0; i < headers.length; i++) {
                         Cell cell = headerRow.createCell(i);
                         cell.setCellValue(headers[i]);
