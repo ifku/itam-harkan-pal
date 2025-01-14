@@ -2,21 +2,21 @@ package com.ifkusyoba.itam_harkan_pal.features.timesheet.service;
 
 import com.ifkusyoba.itam_harkan_pal.core.exception.DataNotFoundException;
 import com.ifkusyoba.itam_harkan_pal.core.exception.OutOfTimeException;
+import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.PostJobRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.PutJobRequest;
-import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.Job;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.entity.WorkOrder;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.JobRepository;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.repository.WorkOrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.management.RuntimeErrorException;
 
 @Service
 public class JobService {
@@ -29,12 +29,11 @@ public class JobService {
                 this.workOrderRepository = workOrderRepository;
         }
 
-        public List<GetJobResponse> getAllJob() {
-                List<Job> jobs = jobRepository.findAll();
-                return jobs.stream()
-                                .map(this::mapToJobResponse)
-                                .collect(Collectors.toList());
+        public Page<GetJobResponse> getAllJob(int page, int size) {
+                Page<Job> jobPage = jobRepository.findAll(PageRequest.of(page, size));
+                return jobPage.map(this::mapToJobResponse);
         }
+
 
         public List<GetJobResponse> getJobsByTimesheetId(Integer timesheetId) {
                 List<Job> jobs = jobRepository.findJobsByTimesheetId(timesheetId)

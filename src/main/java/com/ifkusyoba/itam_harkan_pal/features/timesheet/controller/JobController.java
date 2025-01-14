@@ -1,25 +1,18 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.ifkusyoba.itam_harkan_pal.core.WebPaginateResponse;
 import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.GetJobResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.PostJobRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.job.PutJobRequest;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.service.JobService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("job")
@@ -33,13 +26,24 @@ public class JobController {
     }
 
     @GetMapping
-    @Operation(summary = "Get All Job", description = "Get All Job data")
-    public WebResponse<List<GetJobResponse>> getAllJob() {
-        List<GetJobResponse> getJobResponses = jobService.getAllJob();
-        return WebResponse.<List<GetJobResponse>>builder()
-                .message("Fetch All Job data Success")
-                .data(getJobResponses)
-                .isSuccess(true)
+    @Operation(summary = "Get All Jobs with Pagination", description = "Get paginated Job data")
+    public WebPaginateResponse<List<GetJobResponse>> getAllJob(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<GetJobResponse> jobResponses = jobService.getAllJob(page, size);
+
+        Integer nextPage = jobResponses.hasNext() ? jobResponses.getNumber() + 1 : null;
+        Integer prevPage = jobResponses.hasPrevious() ? jobResponses.getNumber() - 1 : null;
+
+        return WebPaginateResponse.<List<GetJobResponse>>builder()
+                .data(jobResponses.getContent())
+                .pagination(WebPaginateResponse.Pagination.builder()
+                        .totalRecords(jobResponses.getTotalElements())
+                        .currentPage(jobResponses.getNumber() + 1)
+                        .totalPages(jobResponses.getTotalPages())
+                        .nextPage(nextPage)
+                        .prevPage(prevPage)
+                        .build())
                 .build();
     }
 
