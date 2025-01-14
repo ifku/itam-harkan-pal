@@ -10,7 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class WebPaginateResponse<T> {
+    private String message;
     private T data;
+    private boolean isSuccess;
+
     private Pagination pagination;
 
     @Data

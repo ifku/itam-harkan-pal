@@ -1,5 +1,6 @@
 package com.ifkusyoba.itam_harkan_pal.features.timesheet.controller;
 
+import com.ifkusyoba.itam_harkan_pal.core.WebPaginateResponse;
 import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
 import com.ifkusyoba.itam_harkan_pal.core.util.StringUtil;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.timesheet.GetTimesheetResponse;
@@ -9,11 +10,8 @@ import com.ifkusyoba.itam_harkan_pal.features.timesheet.service.TimesheetService
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -35,13 +33,26 @@ public class TimesheetController {
 
     @GetMapping()
     @Operation(summary = "Get All Timesheet", description = "Get All Timesheet data")
-    public WebResponse<List<GetTimesheetResponse>> getAllTimesheet() {
-        List<GetTimesheetResponse> timesheets = timesheetService.getAllTimesheet();
-        return WebResponse.<List<GetTimesheetResponse>>builder()
-                .message("Fetch All Timesheet data Success")
-                .data(timesheets)
-                .isSuccess(true)
-                .build();
+    public WebPaginateResponse<List<GetTimesheetResponse>> getAllTimesheet(
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        {
+            Page<GetTimesheetResponse> timesheetResponses = timesheetService.getAllTimesheet(page, size);
+            Integer nextPage = timesheetResponses.hasNext() ? timesheetResponses.getNumber() + 1 : null;
+            Integer prevPage = timesheetResponses.hasPrevious() ? timesheetResponses.getNumber() - 1 : null;
+
+            return WebPaginateResponse.<List<GetTimesheetResponse>>builder()
+                    .message("Fetch All Timesheet Success")
+                    .data(timesheetResponses.getContent())
+                    .isSuccess(true)
+                    .pagination(WebPaginateResponse.Pagination.builder()
+                            .totalRecords(timesheetResponses.getTotalElements())
+                            .currentPage(timesheetResponses.getNumber() + 1)
+                            .totalPages(timesheetResponses.getTotalPages())
+                            .nextPage(nextPage)
+                            .prevPage(prevPage)
+                            .build())
+                    .build();
+        }
     }
 
     @GetMapping("/{id}")
@@ -69,7 +80,7 @@ public class TimesheetController {
     @PutMapping("/{id}")
     @Operation(summary = "Update Timesheet", description = "Update Timesheet data")
     public WebResponse<GetTimesheetResponse> updateTimesheet(@PathVariable Integer id,
-            @RequestBody PutTimesheetRequest request) {
+                                                             @RequestBody PutTimesheetRequest request) {
         GetTimesheetResponse updatedTimesheet = timesheetService.updateTimesheet(id, request);
         return WebResponse.<GetTimesheetResponse>builder()
                 .message("Update Timesheet data Success")

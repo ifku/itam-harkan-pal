@@ -36,7 +36,9 @@ public class JobController {
         Integer prevPage = jobResponses.hasPrevious() ? jobResponses.getNumber() - 1 : null;
 
         return WebPaginateResponse.<List<GetJobResponse>>builder()
+                .message("Fetch All Jobs Success")
                 .data(jobResponses.getContent())
+                .isSuccess(true)
                 .pagination(WebPaginateResponse.Pagination.builder()
                         .totalRecords(jobResponses.getTotalElements())
                         .currentPage(jobResponses.getNumber() + 1)

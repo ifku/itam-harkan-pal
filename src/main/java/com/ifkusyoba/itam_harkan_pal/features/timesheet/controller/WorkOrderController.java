@@ -2,15 +2,10 @@ package com.ifkusyoba.itam_harkan_pal.features.timesheet.controller;
 
 import java.util.List;
 
+import com.ifkusyoba.itam_harkan_pal.core.WebPaginateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
 
 import com.ifkusyoba.itam_harkan_pal.core.WebResponse;
 import com.ifkusyoba.itam_harkan_pal.features.timesheet.dto.workorder.GetWorkOrderResponse;
@@ -34,14 +29,29 @@ public class WorkOrderController {
 
     @GetMapping
     @Operation(summary = "Get All WorkOrder", description = "Get All WorkOrder data")
-    public WebResponse<List<GetWorkOrderResponse>> getAllWorkOrders() {
-        List<GetWorkOrderResponse> getWorkOrderRespons = workOrderService.getAllWorkOrder();
-        return WebResponse.<List<GetWorkOrderResponse>>builder()
-                .message("Fetch All WorkOrder data Success")
-                .data(getWorkOrderRespons)
+    public WebPaginateResponse<List<GetWorkOrderResponse>> getAllWorkOrders(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        Page<GetWorkOrderResponse> getWorkOrderRespons = workOrderService.getAllWorkOrder(page, size);
+
+        Integer nextPage = getWorkOrderRespons.hasNext() ? getWorkOrderRespons.getNumber() + 1 : null;
+        Integer prevPage = getWorkOrderRespons.hasPrevious() ? getWorkOrderRespons.getNumber() - 1 : null;
+
+        return WebPaginateResponse.<List<GetWorkOrderResponse>>builder()
+                .message("Fetch All WorkOrder Success")
+                .data(getWorkOrderRespons.getContent())
                 .isSuccess(true)
+                .pagination(WebPaginateResponse.Pagination.builder()
+                        .totalRecords(getWorkOrderRespons.getTotalElements())
+                        .currentPage(getWorkOrderRespons.getNumber() + 1)
+                        .totalPages(getWorkOrderRespons.getTotalPages())
+                        .nextPage(nextPage)
+                        .prevPage(prevPage)
+                        .build())
                 .build();
     }
+
 
     @GetMapping("/{id}")
     @Operation(summary = "Get WorkOrder by Id", description = "Get WorkOrder data by Id")
@@ -79,7 +89,7 @@ public class WorkOrderController {
     @PutMapping("/{id}")
     @Operation(summary = "Update WorkOrder", description = "Update WorkOrder data")
     public WebResponse<GetWorkOrderResponse> updateWorkOrder(@PathVariable Integer id,
-            @RequestBody PutWorkOrderRequest request) {
+                                                             @RequestBody PutWorkOrderRequest request) {
         GetWorkOrderResponse getWorkOrderResponse = workOrderService.updateWorkOrder(id, request);
         return WebResponse.<GetWorkOrderResponse>builder()
                 .message("Update WorkOrder Success")
